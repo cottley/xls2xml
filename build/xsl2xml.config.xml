@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<config>
+  <source>
+    <path>../test-data/data-loader/input</path>
+    <extensions>xls,xlsx</extensions>
+  </source>
+  <destination>
+    <path>../test-data/data-loader/output</path>
+  </destination>
+  <threadpool><size>5</size></threadpool>
+  <conversion>
+    <tags>
+      <root>forms</root>
+      <sourcefilename>originalsource</sourcefilename>
+    </tags>
+    <template>
+       <path>templates</path>
+    </template>
+    <searchparams><!-- To find landmarks use case insensitive substring search -->
+      <ignorechars> /:*()\;?</ignorechars>
+      <ignorecase>true</ignorecase>
+      <substringsearch>true</substringsearch>
+    </searchparams>
+    <landmarks>
+
+    </landmarks>
+  </conversion>
+</config>
