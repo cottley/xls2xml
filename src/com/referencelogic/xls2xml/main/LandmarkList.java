@@ -27,17 +27,20 @@ public class LandmarkList {
     }
   }
 
-  public void addLandmark(String value, String landmarkid, String direction, String distance, String type, String collectionid, String scope, String section) {
+  public void addLandmark(String value, String landmarkid, String direction, String distance, String type, String collectionid, String scope, String section, String row, String col, String sheetNo) {
     Landmark landmark = new Landmark();
 
-    landmark.value = value;
-    landmark.id = landmarkid;
-    landmark.direction = direction;
-    landmark.distance = distance;
-    landmark.collectionType = type;
-    landmark.collectionId = collectionid;
-    landmark.collectionScope = scope;
-    landmark.collectionSection = section;
+    landmark.setValue(value);
+    landmark.setId(landmarkid);
+    landmark.setDirection(direction);
+    landmark.setDistance(distance);
+    landmark.setCollectionType(type);
+    landmark.setCollectionId(collectionid);
+    landmark.setCollectionScope(scope);
+    landmark.setCollectionSection(section);
+    landmark.setRow(row);
+    landmark.setCol(col);
+    landmark.setSheetNo(sheetNo);
     
     log.debug(landmark);
 

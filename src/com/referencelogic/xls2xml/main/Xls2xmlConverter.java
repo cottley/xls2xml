@@ -13,6 +13,12 @@ import java.io.FileWriter;
 
 import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.apache.poi.ss.usermodel.Workbook;
+import org.apache.poi.ss.usermodel.Sheet;
+import org.apache.poi.ss.usermodel.Row;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.FormulaEvaluator;
+import org.apache.poi.ss.usermodel.CellValue;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
@@ -46,6 +52,57 @@ public class Xls2xmlConverter implements Runnable {
     //result += "<" + sourcefilenametag + "><![CDATA[" + file.toString() + "]]></" + sourcefilenametag + ">";
     try {
       Workbook input = WorkbookFactory.create(file);
+      
+      log.debug("Processing " + file.toString() + " as an Excel file.");
+      
+      FormulaEvaluator evaluator = input.getCreationHelper().createFormulaEvaluator();
+      
+      for(int sheetno=0; sheetno<input.getNumberOfSheets();sheetno++) {
+      
+        Sheet sheet = input.getSheetAt(sheetno);
+
+        for (Row row : sheet) {
+          for (Cell cell : row) {
+            String cellvalue = "";
+            switch (cell.getCellType()) {
+                case Cell.CELL_TYPE_STRING:
+                    cellvalue = cell.getRichStringCellValue().getString();
+                    break;
+                case Cell.CELL_TYPE_NUMERIC:
+                    if (DateUtil.isCellDateFormatted(cell)) {
+                        cellvalue = "" + cell.getDateCellValue();
+                    } else {
+                        cellvalue = "" + cell.getNumericCellValue();
+                    }
+                    break;
+                case Cell.CELL_TYPE_BOOLEAN:
+                    cellvalue = "" + cell.getBooleanCellValue();
+                    break;
+                case Cell.CELL_TYPE_FORMULA:
+                
+                    CellValue cellValue = evaluator.evaluate(cell);
+
+                    switch (cellValue.getCellType()) {
+                      case Cell.CELL_TYPE_BOOLEAN:
+                          cellvalue = "" + cellValue.getBooleanValue();
+                          break;
+                      case Cell.CELL_TYPE_NUMERIC:
+                          cellvalue = "" + cellValue.getNumberValue();
+                          break;
+                      case Cell.CELL_TYPE_STRING:
+                          cellvalue = "" + cellValue.getStringValue();
+                          break;
+                    }
+                  
+                    break;
+                default:                    
+            }
+            
+            log.debug("Cell value is: " + cellvalue + " [Row,Col]=[" + cell.getRowIndex() + "," + cell.getColumnIndex() + "]");
+          }
+        }
+        
+      }
       // Go through each sheet
         // Go through each cell
           // Does Cell contents match a landmark?

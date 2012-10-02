@@ -22,6 +22,10 @@
       <substringsearch>true</substringsearch>
     </searchparams>
     <landmarks>
+      <collection id="invoice" scope="workbook">
+        <landmark>Invoice #</landmark>
+        <landmark>Thank you for your business!</landmark>
+      </collection>
 
     </landmarks>
   </conversion>

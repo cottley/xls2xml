@@ -59,8 +59,11 @@ public class Xls2xmlMain {
           String landmarkid = landsub.getString("[@id]");
           String direction = landsub.getString("[@direction]");
           String distance = landsub.getString("[@distance]");
+          String row = landsub.getString("[@row]");
+          String col = landsub.getString("[@col]");
+          String sheetNo = landsub.getString("[@sheetno]");
           
-          landmarks.addLandmark(value, landmarkid, direction, distance, type, collectionid, scope, section);
+          landmarks.addLandmark(value, landmarkid, direction, distance, type, collectionid, scope, section, row, col, sheetNo);
         }
       }
     }
