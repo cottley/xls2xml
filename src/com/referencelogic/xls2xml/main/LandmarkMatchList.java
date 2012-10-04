@@ -7,6 +7,8 @@ import java.util.Set;
 import java.util.Hashtable;
 import java.util.Enumeration;
 
+import org.apache.poi.ss.usermodel.Sheet;
+
 public class LandmarkMatchList {
 
   private static final Logger log = Logger.getLogger( LandmarkMatchList.class );
@@ -62,5 +64,10 @@ public class LandmarkMatchList {
     
     return result;
   }
-  
+
+  public Hashtable getTemplateValues(String templateName, Sheet sheet, LandmarkList landmarks) {
+    Hashtable result = new Hashtable();
+    
+    return result;
+  }
 }

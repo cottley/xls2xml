@@ -27,6 +27,8 @@ import org.stringtemplate.v4.STRawGroupDir;
 import org.stringtemplate.v4.ST;
 
 import java.util.List;
+import java.util.Hashtable;
+import java.util.Enumeration;
 
 import org.apache.commons.configuration.HierarchicalConfiguration;
 
@@ -128,13 +130,14 @@ public class Xls2xmlConverter implements Runnable {
 
             // Set landmark name to value of cell given direction and distance
             
-            st.add("title", "Welcome To StringTemplate");
-            st.add("name", "World");
-            st.add("friends", "Ter");
-            st.add("friends", "Kunle");
-            st.add("friends", "Micheal");
-            st.add("friends", "Marq");
-          
+            Hashtable templateValues = lml.getTemplateValues(templateName, sheet, landmarks) ;
+            Enumeration templateValuesKeys = templateValues.keys();
+    
+            while (templateValuesKeys.hasMoreElements()) {
+              String key = (String) templateValuesKeys.nextElement();
+              st.add(key, (String)templateValues.get(key));
+            }
+                      
             result += st.render();
           } else {
             log.error("Unable to load template " + templateName + ".st! Cannot render data to template.");
