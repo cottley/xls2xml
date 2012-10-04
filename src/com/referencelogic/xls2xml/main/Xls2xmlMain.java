@@ -85,7 +85,7 @@ public class Xls2xmlMain {
         
         while(iter.hasNext()) {
           File file = (File) iter.next();
-          exec.execute(new Xls2xmlConverter(file, config));
+          exec.execute(new Xls2xmlConverter(file, config, landmarks));
         }
         
         exec.shutdown();

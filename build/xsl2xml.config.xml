@@ -17,7 +17,8 @@
        <path>templates</path>
     </template>
     <searchparams><!-- To find landmarks use case insensitive substring search -->
-      <ignorechars> /:*()\;?</ignorechars>
+      <ignorechars>/:*()\;?</ignorechars>
+      <ignorewhitespaces>true</ignorewhitespaces>
       <ignorecase>true</ignorecase>
       <substringsearch>true</substringsearch>
     </searchparams>
@@ -26,7 +27,9 @@
         <landmark>Invoice #</landmark>
         <landmark>Thank you for your business!</landmark>
       </collection>
-
+      <collection id="purchaseorder" scope="workbook">
+        <landmark>Purchase</landmark>
+      </collection>
     </landmarks>
   </conversion>
 </config>
