@@ -23,12 +23,16 @@
       <substringsearch>true</substringsearch>
     </searchparams>
     <landmarks>
-      <collection id="invoice" scope="workbook">
+      <collection id="invoice" identifies="worksheet">
         <landmark>Invoice #</landmark>
         <landmark>Thank you for your business!</landmark>
       </collection>
-      <collection id="purchaseorder" scope="workbook">
+      <collection id="purchaseorder" identifies="worksheet">
         <landmark>Purchase</landmark>
+      </collection>
+      <collection id="invoicecells" identifies="invoice" type="cells">
+        <landmark direction="E" distance="1" substringsearch="false">Date</landmark>
+        <landmark direction="E" distance="1">Invoice #</landmark>
       </collection>
     </landmarks>
   </conversion>

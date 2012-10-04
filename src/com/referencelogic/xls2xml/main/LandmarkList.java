@@ -33,7 +33,7 @@ public class LandmarkList {
     }
   }
 
-  public void addLandmark(String value, String landmarkid, String direction, String distance, String type, String collectionid, String scope, String section, String row, String col, String sheetNo) {
+  public void addLandmark(String value, String landmarkid, String direction, String distance, String type, String collectionid, String identifies, String section, String row, String col, String sheetNo) {
     Landmark landmark = new Landmark();
 
     landmark.setValue(value);
@@ -42,7 +42,7 @@ public class LandmarkList {
     landmark.setDistance(distance);
     landmark.setCollectionType(type);
     landmark.setCollectionId(collectionid);
-    landmark.setCollectionScope(scope);
+    landmark.setCollectionIdentifier(identifies);
     landmark.setCollectionSection(section);
     landmark.setRow(row);
     landmark.setCol(col);
@@ -100,12 +100,12 @@ public class LandmarkList {
     return landmarks.size();
   }
   
-  public Hashtable getLandmarkIdsForScope(String scope) {
+  public Hashtable getLandmarkIdsForIdentifier(String identifier) {
     Hashtable result = new Hashtable();
     
     for (int i = 0; i < landmarks.size(); i++) {
       Landmark thisLandmark = (Landmark)landmarks.get(i);
-      if (thisLandmark.getCollectionScope().equalsIgnoreCase(scope)) {
+      if (thisLandmark.getCollectionIdentifier().equalsIgnoreCase(identifier)) {
         result.put(thisLandmark.getCollectionId(), thisLandmark.getCollectionId()); 
       }
     }

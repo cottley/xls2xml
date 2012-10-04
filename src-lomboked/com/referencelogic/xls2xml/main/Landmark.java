@@ -9,7 +9,7 @@ public class Landmark {
   protected String distance;
   protected String collectionType;
   protected String collectionId;
-  protected String collectionScope;
+  protected String collectionIdentifier;
   protected String collectionSection;
   protected String row;
   protected String col;

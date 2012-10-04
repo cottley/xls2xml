@@ -31,7 +31,7 @@ public class LandmarkMatchList {
     String result = "";
     
     // Get the list of landmarks - ids match template names
-    Hashtable lmids = landmarks.getLandmarkIdsForScope("workbook");
+    Hashtable lmids = landmarks.getLandmarkIdsForIdentifier("worksheet");
     Enumeration workbookKeys = lmids.keys();
     
     while (workbookKeys.hasMoreElements()) {

@@ -48,7 +48,7 @@ public class Xls2xmlMain {
       {
         String type = sub.getString("[@type]");
         String collectionid = sub.getString("[@id]");
-        String scope = sub.getString("[@scope]");
+        String identifies = sub.getString("[@identifies]");
         String section = sub.getString("[@section]");
 
         List<HierarchicalConfiguration> landmarksInCollection = sub.configurationsAt("landmark");
@@ -63,7 +63,7 @@ public class Xls2xmlMain {
           String col = landsub.getString("[@col]");
           String sheetNo = landsub.getString("[@sheetno]");
           
-          landmarks.addLandmark(value, landmarkid, direction, distance, type, collectionid, scope, section, row, col, sheetNo);
+          landmarks.addLandmark(value, landmarkid, direction, distance, type, collectionid, identifies, section, row, col, sheetNo);
         }
       }
     }
