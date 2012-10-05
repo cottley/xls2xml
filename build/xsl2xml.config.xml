@@ -31,8 +31,8 @@
         <landmark>Purchase</landmark>
       </collection>
       <collection id="invoicecells" identifies="invoice" type="cells">
-        <landmark direction="E" distance="1" substringsearch="false">Date</landmark>
-        <landmark direction="E" distance="1">Invoice #</landmark>
+        <landmark id="invoicedate" direction="E" distance="1" substringsearch="false">Date</landmark>
+        <landmark id="invoicenumber" direction="E" distance="1">Invoice #</landmark>
       </collection>
     </landmarks>
   </conversion>

@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <forms>
-<html>
-    <head>
-       <title>Welcome To StringTemplate</title>
-    </head>
-    <body>
-       <p>Hello again, World !</p>
-       <p>Greetings to your friends Kunle, Micheal, Marq</p>
-   </body>
-</html>
+<invoice>
+  <invoicedate>October 5", "2012</invoicedate>
+  <invoicenumber>2</invoicenumber>
+</invoice>
 </forms>

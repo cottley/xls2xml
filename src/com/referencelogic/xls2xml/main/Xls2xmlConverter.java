@@ -16,9 +16,9 @@ import org.apache.poi.ss.usermodel.Workbook;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.DateUtil;
+//import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
-import org.apache.poi.ss.usermodel.CellValue;
+//import org.apache.poi.ss.usermodel.CellValue;
 
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 
@@ -73,47 +73,14 @@ public class Xls2xmlConverter implements Runnable {
         
           // Go through each cell
           for (Cell cell : row) {
-            String cellvalue = "";
-            switch (cell.getCellType()) {
-                case Cell.CELL_TYPE_STRING:
-                    cellvalue = cell.getRichStringCellValue().getString();
-                    break;
-                case Cell.CELL_TYPE_NUMERIC:
-                    if (DateUtil.isCellDateFormatted(cell)) {
-                        cellvalue = "" + cell.getDateCellValue();
-                    } else {
-                        cellvalue = "" + cell.getNumericCellValue();
-                    }
-                    break;
-                case Cell.CELL_TYPE_BOOLEAN:
-                    cellvalue = "" + cell.getBooleanCellValue();
-                    break;
-                case Cell.CELL_TYPE_FORMULA:
-                
-                    CellValue cellValue = evaluator.evaluate(cell);
-
-                    switch (cellValue.getCellType()) {
-                      case Cell.CELL_TYPE_BOOLEAN:
-                          cellvalue = "" + cellValue.getBooleanValue();
-                          break;
-                      case Cell.CELL_TYPE_NUMERIC:
-                          cellvalue = "" + cellValue.getNumberValue();
-                          break;
-                      case Cell.CELL_TYPE_STRING:
-                          cellvalue = "" + cellValue.getStringValue();
-                          break;
-                    }
-                  
-                    break;
-                default:                    
-            }
+            String cellvalue = lml.getCellValue(cell, evaluator);
             
             if (!cellvalue.equals("")) {
               log.trace("Cell value is: " + cellvalue + " [Row,Col]=[" + cell.getRowIndex() + "," + cell.getColumnIndex() + "]");
               log.trace("Matching landmarks: " + landmarks.getLandmarksFor(cellvalue));
               
               // Does Cell contents match a landmark?
-              lml.addMatches(landmarks.getLandmarksFor(cellvalue), cell.getRowIndex(), cell.getColumnIndex());
+              lml.addMatches(landmarks.getLandmarksFor(cellvalue), cell);
             } else {
               log.trace("Cell value is blank. [Row,Col]=[" + cell.getRowIndex() + "," + cell.getColumnIndex() + "]");
             }
@@ -130,7 +97,7 @@ public class Xls2xmlConverter implements Runnable {
 
             // Set landmark name to value of cell given direction and distance
             
-            Hashtable templateValues = lml.getTemplateValues(templateName, sheet, landmarks) ;
+            Hashtable templateValues = lml.getCellTemplateValues(templateName, sheet, landmarks, evaluator);
             Enumeration templateValuesKeys = templateValues.keys();
     
             while (templateValuesKeys.hasMoreElements()) {

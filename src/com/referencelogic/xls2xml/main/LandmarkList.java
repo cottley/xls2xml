@@ -100,7 +100,7 @@ public class LandmarkList {
     return landmarks.size();
   }
   
-  public Hashtable getLandmarkIdsForIdentifier(String identifier) {
+  public Hashtable getLandmarkCollectionIdsForIdentifier(String identifier) {
     Hashtable result = new Hashtable();
     
     for (int i = 0; i < landmarks.size(); i++) {
@@ -113,6 +113,43 @@ public class LandmarkList {
     return result;
   }
   
+  public Hashtable getLandmarkIdsForIdentifier(String identifier, String type) {
+    Hashtable result = new Hashtable();
+    
+    for (int i = 0; i < landmarks.size(); i++) {
+      Landmark thisLandmark = (Landmark)landmarks.get(i);
+      if (thisLandmark.getCollectionIdentifier().equalsIgnoreCase(identifier) && 
+          thisLandmark.getCollectionType().equalsIgnoreCase(type)) {
+        result.put(thisLandmark.getId(), thisLandmark.getId()); 
+      }
+    }
+    
+    return result;
+  }
+
+  public Landmark getLandmark(int landmarkNumber) {
+    Landmark result = null;
+    if ((landmarkNumber > -1) && (landmarkNumber < landmarks.size())) {
+      result = (Landmark)landmarks.get(landmarkNumber);
+    }
+    return result;
+  }
+
+  public int getLandmarkNumberFromId(String landmarkId) {
+    int result = -1;
+    for (int i = 0; i < landmarks.size(); i++) {
+      Landmark thisLandmark = (Landmark)landmarks.get(i);
+      if (thisLandmark.getId() != null) {
+        if (thisLandmark.getId().equals(landmarkId)) {
+          result = i;
+          break;
+        }
+      }
+    }
+
+    return result;
+  }
+
   public ArrayList getIndexesForId(String id) {
     ArrayList result = new ArrayList();
   
