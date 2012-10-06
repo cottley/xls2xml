@@ -10,12 +10,12 @@ import java.util.Enumeration;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.util.CellUtil;
 import org.apache.poi.ss.usermodel.Cell;
-//import org.apache.poi.ss.usermodel.DateUtil;
+import org.apache.poi.ss.usermodel.DateUtil;
 import org.apache.poi.ss.usermodel.FormulaEvaluator;
-//import org.apache.poi.ss.usermodel.CellValue;
+import org.apache.poi.ss.usermodel.CellValue;
 import org.apache.poi.ss.usermodel.DataFormatter;
 
-//import java.text.SimpleDateFormat;
+import java.text.SimpleDateFormat;
 
 public class LandmarkMatchList {
 
@@ -83,12 +83,21 @@ public class LandmarkMatchList {
     return result;
   }
 
+  protected boolean isDouble(String s) {
+    boolean result = true;
+    try {
+      Double.valueOf(s);
+    } catch (NumberFormatException e) {
+      result = false;
+    }
+    return result;
+  }
 
   public String getCellValue(Cell cell, FormulaEvaluator evaluator) {
-  //  SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
+    SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
 
     String cellvalue = "";
-/*
+
             switch (cell.getCellType()) {
                 case Cell.CELL_TYPE_STRING:
                     cellvalue = cell.getRichStringCellValue().getString();
@@ -112,7 +121,11 @@ public class LandmarkMatchList {
                           cellvalue = "" + cellValue.getBooleanValue();
                           break;
                       case Cell.CELL_TYPE_NUMERIC:
-                          cellvalue = "" + cellValue.getNumberValue();
+                          if (!isDouble(dataFormatter.formatCellValue(cell, evaluator))) {
+                            cellvalue = "" + format.format(DateUtil.getJavaDate(cellValue.getNumberValue()));
+                          } else {
+                            cellvalue = "" + cellValue.getNumberValue();
+                          }
                           break;
                       case Cell.CELL_TYPE_STRING:
                           cellvalue = "" + cellValue.getStringValue();
@@ -122,8 +135,7 @@ public class LandmarkMatchList {
                     break;
                 default:                    
             }
-*/
-     cellvalue = dataFormatter.formatCellValue(cell, evaluator); 
+
      return cellvalue;
   }
 

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <forms>
 <invoice>
-  <invoicedate>October 5", "2012</invoicedate>
-  <invoicenumber>2</invoicenumber>
+  <invoicedate>2012-10-06 12:00:00 AM</invoicedate>
+  <invoicenumber>2.0</invoicenumber>
 </invoice>
 </forms>
