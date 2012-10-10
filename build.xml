@@ -24,7 +24,7 @@
   	<mkdir dir="build"/>
   </target>
 
-	<target name="build" depends="clean, mkdirs, preprocess, compile, build.xls2xml" />
+	<target name="build" depends="clean, mkdirs, compile, build.xls2xml" />
 
 	<target name="clean">
 	  <delete dir="classes" />
@@ -43,7 +43,7 @@
         from="src-lomboked" />
   </target>
   
-	<target name="compile" depends="mkdirs, preprocess">
+	<target name="compile" depends="mkdirs">
     <javac destdir="classes/src" includes="**/*.java" debug="true" includeantruntime="false">
       <src path="src" />
       <classpath refid="libraries" />
