@@ -155,8 +155,12 @@ public class LandmarkList {
   
     for (int i = 0; i < landmarks.size(); i++) {
       Landmark thisLandmark = (Landmark)landmarks.get(i);
-      if (thisLandmark.getCollectionId().equals(id)) {
-        result.add(i); 
+      if (thisLandmark != null) {
+        if (thisLandmark.getCollectionId() != null) {
+          if (thisLandmark.getCollectionId().equals(id)) {
+            result.add(i); 
+          }
+        }
       }
     }
     

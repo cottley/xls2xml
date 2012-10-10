@@ -159,8 +159,9 @@ public class LandmarkMatchList {
   }
 
 
-  public String getCellValueForLandmark(String landmarkId, Sheet sheet, LandmarkList landmarks, FormulaEvaluator evaluator) {
-    String result = "";
+  public Hashtable getCellValueForLandmark(String landmarkId, Sheet sheet, LandmarkList landmarks, FormulaEvaluator evaluator) {
+    Hashtable result = new Hashtable();    
+    result.put("result", "");
 
     try {
       int landmarkNumber = landmarks.getLandmarkNumberFromId(landmarkId);
@@ -176,9 +177,10 @@ public class LandmarkMatchList {
 
           // Get updated X,y location
           LandmarkMatch lmm = getDataLocationUsingLandmark(landmarks.getLandmark(landmarkNumber), cell);
+          result.put("lmm", lmm);
 
           // Get value from sheet - row, col
-          result = getCellValue(CellUtil.getCell(CellUtil.getRow(lmm.getRow(), sheet), lmm.getCol()), evaluator);
+          result.put("result", getCellValue(CellUtil.getCell(CellUtil.getRow(lmm.getRow(), sheet), lmm.getCol()), evaluator));
           
           break;
         }
@@ -191,7 +193,7 @@ public class LandmarkMatchList {
     return result;
   }
 
-  public Hashtable getCellTemplateValues(String templateName, Sheet sheet, LandmarkList landmarks, FormulaEvaluator evaluator) {
+  public Hashtable getCellTemplateValues(String templateName, Sheet sheet, LandmarkList landmarks, FormulaEvaluator evaluator, String sourcefilename, int sheetno) {
     Hashtable result = new Hashtable();
 
     log.debug("Getting landmarks for template with type cell. Template: " + templateName); 
@@ -200,11 +202,16 @@ public class LandmarkMatchList {
 
     Enumeration cellLandmarksKeys = cellLandmarks.keys();
     
+    result.put("xls2xml_sourcefilename", sourcefilename);
+    result.put("xls2xml_sheetno", "" + sheetno);      
+    
     while (cellLandmarksKeys.hasMoreElements()) {
       String key = (String) cellLandmarksKeys.nextElement();
-      String value = getCellValueForLandmark(key, sheet, landmarks, evaluator);
+      Hashtable value = getCellValueForLandmark(key, sheet, landmarks, evaluator);
       log.debug("Getting cell template key and value - [" + key + "," + value + "]");
-      result.put(key, value);
+      result.put(key, (String)value.get("result"));
+      result.put(key + "_xls2xml_row", "" + ((LandmarkMatch)value.get("lmm")).getRow());      
+      result.put(key + "_xls2xml_col", "" + ((LandmarkMatch)value.get("lmm")).getCol());      
     }
 
     return result;

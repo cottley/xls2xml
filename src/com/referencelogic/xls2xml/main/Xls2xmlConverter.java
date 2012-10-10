@@ -47,7 +47,13 @@ public class Xls2xmlConverter implements Runnable {
 
   public String process2xml() {
     String result = "";
-    String sourcefilenametag = config.getString("conversion.tags.sourcefilename");
+    //String sourcefilenametag = config.getString("conversion.tags.sourcefilename");
+    String sourcefilename = file.getAbsolutePath();
+    try { 
+      sourcefilename = file.getCanonicalPath();
+    } catch (IOException ioe) {
+      log.warn("Could not get cannonical path for file!", ioe);
+    }
     String templatedir = config.getString("conversion.template.path");
 
     //result += "<" + sourcefilenametag + "><![CDATA[" + file.toString() + "]]></" + sourcefilenametag + ">";
@@ -97,7 +103,7 @@ public class Xls2xmlConverter implements Runnable {
 
             // Set landmark name to value of cell given direction and distance
             
-            Hashtable templateValues = lml.getCellTemplateValues(templateName, sheet, landmarks, evaluator);
+            Hashtable templateValues = lml.getCellTemplateValues(templateName, sheet, landmarks, evaluator, sourcefilename, sheetno);
             Enumeration templateValuesKeys = templateValues.keys();
     
             while (templateValuesKeys.hasMoreElements()) {
