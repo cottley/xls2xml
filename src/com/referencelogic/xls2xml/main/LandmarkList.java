@@ -112,6 +112,21 @@ public class LandmarkList {
     
     return result;
   }
+
+  public Hashtable getLandmarkSectionsForIdentifier(String identifier) {
+    Hashtable result = new Hashtable();
+    
+    for (int i = 0; i < landmarks.size(); i++) {
+      Landmark thisLandmark = (Landmark)landmarks.get(i);
+      if (thisLandmark.getCollectionIdentifier().equalsIgnoreCase(identifier)) {
+        if (thisLandmark.getCollectionSection() != null) {
+          result.put(thisLandmark.getCollectionSection(), thisLandmark.getCollectionSection()); 
+        }
+      }
+    }
+    
+    return result;
+  }
   
   public Hashtable getLandmarkIdsForIdentifier(String identifier, String type) {
     Hashtable result = new Hashtable();

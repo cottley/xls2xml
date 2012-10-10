@@ -5,4 +5,12 @@
   </meta>
   <invoicedate row="$invoicedate_xls2xml_row$" col="$invoicedate_xls2xml_col$">$invoicedate$</invoicedate>
   <invoicenumber row="$invoicenumber_xls2xml_row$" col="$invoicenumber_xls2xml_col$">$invoicenumber$</invoicenumber>
+  <list>
+    $productdetails:{ productdetail |
+    <productdetail>
+      <productid>$productdetail.invoice_productid$</productid>
+      <productdesc>$productdetail.invoice_description$</productdesc>
+    </productdetail>  
+    }$
+  </list>
 </invoice>

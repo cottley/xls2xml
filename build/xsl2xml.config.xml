@@ -34,14 +34,14 @@
         <landmark id="invoicedate" direction="E" distance="1" substringsearch="false">Date</landmark>
         <landmark id="invoicenumber" direction="E" distance="1">Invoice #</landmark>
       </collection>
-      <collection id="productdetailsheader" section="productdetails" identifies="invoice" type="headerrow">
+      <collection id="productdetailsheader" section="productdetails" identifies="invoice" type="header">
         <landmark id="invoice_productid">Product ID</landmark>
         <landmark id="invoice_description">Description</landmark>
         <landmark id="invoice_qtyhours">Qty/Hours</landmark>
         <landmark id="invoice_unitprice">Unit Price</landmark>
         <landmark id="invoice_linetotal">Line Total</landmark>
       </collection>
-      <collection id="productdetailsfooter" section="productdetails" identifies="invoice" type="footerrow" maxblanklines="2">
+      <collection id="productdetailsfooter" section="productdetails" identifies="invoice" type="footer" maxblanklines="2">
         <landmark id="invoice_subtotal">Subtotal</landmark>
       </collection>      
     </landmarks>

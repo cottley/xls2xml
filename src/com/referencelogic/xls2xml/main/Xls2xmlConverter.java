@@ -29,6 +29,7 @@ import org.stringtemplate.v4.ST;
 import java.util.List;
 import java.util.Hashtable;
 import java.util.Enumeration;
+import java.util.ArrayList;
 
 import org.apache.commons.configuration.HierarchicalConfiguration;
 
@@ -110,7 +111,15 @@ public class Xls2xmlConverter implements Runnable {
               String key = (String) templateValuesKeys.nextElement();
               st.add(key, (String)templateValues.get(key));
             }
-                      
+           
+            ArrayList<String> sectionNames = lml.getSectionNamesForTemplate(templateName, landmarks);
+            for (String sectionName : sectionNames) {
+                        
+              ArrayList<Hashtable> sectionrows = lml.getSectionRows(templateName, landmarks, sectionName); 
+            
+              st.add(sectionName, sectionrows);
+            }
+            
             result += st.render();
           } else {
             log.error("Unable to load template " + templateName + ".st! Cannot render data to template.");

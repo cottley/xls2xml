@@ -216,4 +216,43 @@ public class LandmarkMatchList {
 
     return result;
   }
+  
+  public ArrayList getSectionNamesForTemplate(String templateName, LandmarkList landmarks) {
+    ArrayList result = new ArrayList();
+        
+    Hashtable lmsect = landmarks.getLandmarkSectionsForIdentifier(templateName);
+    Enumeration lmsectkeys = lmsect.keys();
+    
+    while (lmsectkeys.hasMoreElements()) {
+      String key = (String) lmsectkeys.nextElement();
+      log.debug("Found section name for template " + templateName + ": " + key);
+      result.add(key);
+    }
+        
+    return result;
+  }
+  
+  public ArrayList<Hashtable> getSectionRows(String templateName, LandmarkList landmarks, String sectionName) {
+    ArrayList<Hashtable> result = new ArrayList<Hashtable>();
+    
+    Hashtable row = new Hashtable();
+    row.put("invoice_productid", "001");
+    row.put("invoice_description", "My first product");
+            
+    result.add(row);
+            
+    row = new Hashtable();
+    row.put("invoice_productid", "002");
+    row.put("invoice_description", "My second product");
+            
+    result.add(row);
+
+    row = new Hashtable();
+    row.put("invoice_productid", "003");
+    row.put("invoice_description", "My third product");
+            
+    result.add(row);
+            
+    return result;
+  }
 }
