@@ -158,6 +158,35 @@ public class LandmarkMatchList {
     return result;
   }
 
+  public LandmarkMatch getDataLocationUsingLandmark(Landmark landmark, Cell cell, String defaultDirection, int defaultDistance) {
+    LandmarkMatch result = new LandmarkMatch(-1, -1);
+
+    int row = cell.getRowIndex();
+    int col = cell.getColumnIndex();
+
+    int distance = defaultDistance;
+    try { 
+      distance = Integer.parseInt(landmark.getDistance());
+    } catch (Exception e) {
+      log.trace("Could not determine landmark distance to use, using default of " + defaultDistance, e);
+    }
+    
+    String direction = defaultDirection;
+    
+    if (landmark.getDirection() != null) {
+      direction = landmark.getDirection();
+    }
+    
+    if (direction.equalsIgnoreCase("N") || direction.equalsIgnoreCase("W")) { distance *= -1; }
+
+    if (direction.equalsIgnoreCase("N") || direction.equalsIgnoreCase("S")) { row += distance; }
+    if (direction.equalsIgnoreCase("W") || direction.equalsIgnoreCase("E")) { col += distance; }
+    
+    result = new LandmarkMatch(row, col);
+
+    return result;
+  }
+  
 
   public Hashtable getCellValueForLandmark(String landmarkId, Sheet sheet, LandmarkList landmarks, FormulaEvaluator evaluator) {
     Hashtable result = new Hashtable();    
@@ -193,6 +222,41 @@ public class LandmarkMatchList {
     return result;
   }
 
+  public Hashtable getCellValueForLandmark(String landmarkId, Sheet sheet, LandmarkList landmarks, FormulaEvaluator evaluator, String defaultDirection, int rowoffset) {
+    Hashtable result = new Hashtable();    
+    result.put("result", "");
+
+    try {
+      int landmarkNumber = landmarks.getLandmarkNumberFromId(landmarkId);
+
+      // Get match index for landmark
+      ArrayList<Cell> landmarkCellMatches = matches[landmarkNumber];
+
+      // Get cell of landmark
+      for (Cell cell : landmarkCellMatches) {
+
+        // If the cell is for the sheet
+        if (cell.getSheet().equals(sheet)) {
+
+          // Get updated X,y location
+          LandmarkMatch lmm = getDataLocationUsingLandmark(landmarks.getLandmark(landmarkNumber), cell, defaultDirection, rowoffset);
+          result.put("lmm", lmm);
+
+          // Get value from sheet - row, col
+          result.put("result", getCellValue(CellUtil.getCell(CellUtil.getRow(lmm.getRow(), sheet), lmm.getCol()), evaluator));
+          
+          break;
+        }
+
+      }
+    } catch (Exception e) {
+      log.warn("Unable to get cell value based on landmark " + landmarkId, e);
+    }
+
+    return result;
+  }
+
+  
   public Hashtable getCellTemplateValues(String templateName, Sheet sheet, LandmarkList landmarks, FormulaEvaluator evaluator, String sourcefilename, int sheetno) {
     Hashtable result = new Hashtable();
 
@@ -232,8 +296,51 @@ public class LandmarkMatchList {
     return result;
   }
   
-  public ArrayList<Hashtable> getSectionRows(String templateName, LandmarkList landmarks, String sectionName) {
+  public ArrayList<Hashtable> getSectionRows(String templateName, Sheet sheet, LandmarkList landmarks, FormulaEvaluator evaluator, String sectionName) {
     ArrayList<Hashtable> result = new ArrayList<Hashtable>();
+    
+    // Row offset 0
+    int rowoffset = 0;
+
+    // Direction is S unless otherwise specified
+    String defaultDirection = "S";
+
+    boolean isEndOfSection = false;
+
+    // Get list of landmarks type "header" in section
+    Hashtable sectionLandmarks = landmarks.getLandmarkIdsForIdentifierForSectionsForType(templateName, sectionName, "header");
+    
+    // While the end of the section has not been reached
+    while (!isEndOfSection) {
+      //   Initialize hashtable
+      Hashtable row = new Hashtable();
+      
+      //   Increment row offset
+      rowoffset++;
+
+      Enumeration sectionLandmarksKeys = sectionLandmarks.keys();
+      //   For each landmark in the section
+      while (sectionLandmarksKeys.hasMoreElements()) {
+        String key = (String) sectionLandmarksKeys.nextElement();
+      
+        //     Get Cell Value
+        Hashtable value = getCellValueForLandmark(key, sheet, landmarks, evaluator, defaultDirection, rowoffset);
+        
+        //     Add to hashtable
+        row.put(key, (String)value.get("result"));
+        row.put(key + "_xls2xml_row", "" + ((LandmarkMatch)value.get("lmm")).getRow());      
+        row.put(key + "_xls2xml_col", "" + ((LandmarkMatch)value.get("lmm")).getCol());        
+        
+      //   End
+      }
+      //   Add hashtable to result
+      result.add(row);
+      
+      // TODO: Figure out how to determine end of section
+      isEndOfSection = true;   
+    } // End While
+    
+    
     
     Hashtable row = new Hashtable();
     row.put("invoice_productid", "001");

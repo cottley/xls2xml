@@ -9,6 +9,10 @@
   <invoicenumber row="5" col="4">2.0</invoicenumber>
   <list>
         <productdetail>
+          <productid>1.0</productid>
+          <productdesc>My first product</productdesc>
+        </productdetail>  
+        <productdetail>
           <productid>001</productid>
           <productdesc>My first product</productdesc>
         </productdetail>  

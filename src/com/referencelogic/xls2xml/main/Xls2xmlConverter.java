@@ -115,7 +115,7 @@ public class Xls2xmlConverter implements Runnable {
             ArrayList<String> sectionNames = lml.getSectionNamesForTemplate(templateName, landmarks);
             for (String sectionName : sectionNames) {
                         
-              ArrayList<Hashtable> sectionrows = lml.getSectionRows(templateName, landmarks, sectionName); 
+              ArrayList<Hashtable> sectionrows = lml.getSectionRows(templateName, sheet, landmarks, evaluator, sectionName); 
             
               st.add(sectionName, sectionrows);
             }

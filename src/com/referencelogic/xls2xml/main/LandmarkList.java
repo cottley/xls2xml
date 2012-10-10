@@ -181,4 +181,25 @@ public class LandmarkList {
     
     return result;
   }
+  
+  public Hashtable getLandmarkIdsForIdentifierForSectionsForType(String identifier, String section, String type) {
+    Hashtable result = new Hashtable();
+    
+    for (int i = 0; i < landmarks.size(); i++) {
+      Landmark thisLandmark = (Landmark)landmarks.get(i);
+      if (thisLandmark.getCollectionIdentifier().equalsIgnoreCase(identifier)) {
+        if (thisLandmark.getCollectionSection() != null) {
+          if (thisLandmark.getCollectionSection().equalsIgnoreCase(section)) {
+            if (thisLandmark.getCollectionType() != null) {
+              if (thisLandmark.getCollectionType().equalsIgnoreCase(type)) {
+                result.put(thisLandmark.getId(), thisLandmark.getId());
+              }
+            }
+          }
+        }
+      }
+    }
+    
+    return result;
+  }
 }
