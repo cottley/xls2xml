@@ -348,14 +348,42 @@ public class LandmarkMatchList {
       result = allareblank;
     } else {
     //   for each landmark in section end
-    //     Get section end landmark match row and column
-    //     for each of the section landmarks
+      Enumeration sectionEndLandmarksKeys = sectionEndLandmarks.keys();
+      while (sectionEndLandmarksKeys.hasMoreElements()) {
+        String key = (String) sectionEndLandmarksKeys.nextElement();
+        //     Get section end landmark match row and column
+        ArrayList<Cell> sectionEndLandmarksMatches = matches[landmarks.getLandmarkNumberFromId(key)];
+        
+        //     for each of the section landmarks
+        for (Cell sectionEndLandmarkMatch : sectionEndLandmarksMatches) {
+
+          Enumeration sectionLandmarksKeys = sectionLandmarks.keys();
+          //   For each landmark in the section
+          while (sectionLandmarksKeys.hasMoreElements()) {
+            String lmkey = (String) sectionLandmarksKeys.nextElement();
+            
+            ArrayList<Cell> sectionLandmarksMatches = matches[landmarks.getLandmarkNumberFromId(lmkey)];
+            
+            for (Cell sectionLandmarkMatch : sectionLandmarksMatches) {
     //       if section landmark row + rowoffset equals section end landmark row
     //          and section landmark col equals section end landmark col
     //            result is true
     //       end if
-    //     end for
-    //   end for
+               if ((sectionEndLandmarkMatch.getRowIndex()    == sectionLandmarkMatch.getRowIndex() + rowoffset) &&
+                   (sectionEndLandmarkMatch.getColumnIndex() == sectionLandmarkMatch.getColumnIndex())) {
+                 result = true;
+                 break;
+               }
+            }
+            
+            if (result) { break; }
+          }
+        
+          if (result) { break; }
+        } //     end for
+        
+        if (result) { break; }
+      } //   end for
     
     // end if
     }
