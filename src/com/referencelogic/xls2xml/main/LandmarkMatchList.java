@@ -296,11 +296,77 @@ public class LandmarkMatchList {
     return result;
   }
   
+  public boolean isRowBlank(Hashtable sectionLandmarks, int rowoffset, Sheet sheet, LandmarkList landmarks, FormulaEvaluator evaluator, String defaultDirection) {
+    boolean result = false;
+
+    String rowcontent = "";
+    
+    Enumeration sectionLandmarksKeys = sectionLandmarks.keys();
+    //   For each landmark in the section
+    while (sectionLandmarksKeys.hasMoreElements()) {
+      String key = (String) sectionLandmarksKeys.nextElement();
+      
+      //     Get Cell Value
+      Hashtable value = getCellValueForLandmark(key, sheet, landmarks, evaluator, defaultDirection, rowoffset);
+        
+      //     Add to rowcontent
+      rowcontent += ((String)value.get("result")).trim();
+    }
+      
+    result = rowcontent.equals("");
+        
+    return result;
+  }
+  
+  public boolean checkEndOfSection(Hashtable sectionLandmarks, int rowoffset, Hashtable sectionEndLandmarks, LandmarkList landmarks, Sheet sheet, FormulaEvaluator evaluator, String defaultDirection) {
+    boolean result = false;
+    
+    // Get max blank lines
+    int maxblanklines = 0; // Min valid value is 1
+    
+    try {
+      // Get a section landmark
+      Enumeration sectionEndLandmarksKeys = sectionEndLandmarks.keys();
+      if (sectionEndLandmarksKeys.hasMoreElements()) {
+        String key = (String) sectionEndLandmarksKeys.nextElement();
+        Landmark maxblanklineslm = landmarks.getLandmark(landmarks.getLandmarkNumberFromId(key));
+        maxblanklines = Integer.parseInt(maxblanklineslm.getCollectionMaxBlankLines());
+      }
+    } catch (Exception e) {
+      log.trace("Unable to get a defined value for max blank lines for section end landmarks", e);
+    }
+    
+    // If limit on max blank lines
+    if (maxblanklines > 0) {
+      boolean allareblank = true;
+      //  repeat max blank lines times
+      for (int count=0; count<maxblanklines; count++) {
+        //    check to see if specified line is blank for section
+        allareblank &= isRowBlank(sectionLandmarks, rowoffset + count, sheet, landmarks, evaluator, defaultDirection);
+      }
+      //  if all lines are blank result is true
+      result = allareblank;
+    } else {
+    //   for each landmark in section end
+    //     Get section end landmark match row and column
+    //     for each of the section landmarks
+    //       if section landmark row + rowoffset equals section end landmark row
+    //          and section landmark col equals section end landmark col
+    //            result is true
+    //       end if
+    //     end for
+    //   end for
+    
+    // end if
+    }
+    return result;
+  }
+  
   public ArrayList<Hashtable> getSectionRows(String templateName, Sheet sheet, LandmarkList landmarks, FormulaEvaluator evaluator, String sectionName) {
     ArrayList<Hashtable> result = new ArrayList<Hashtable>();
     
-    // Row offset 0
-    int rowoffset = 0;
+    // Row offset 1
+    int rowoffset = 1;
 
     // Direction is S unless otherwise specified
     String defaultDirection = "S";
@@ -313,15 +379,13 @@ public class LandmarkMatchList {
     // Get list of landmarks type "footer" in section
     Hashtable sectionEndLandmarks = landmarks.getLandmarkIdsForIdentifierForSectionsForType(templateName, sectionName, "footer");
 
+    isEndOfSection = checkEndOfSection(sectionLandmarks, rowoffset, sectionEndLandmarks, landmarks, sheet, evaluator, defaultDirection);
     
     // While the end of the section has not been reached
     while (!isEndOfSection) {
       //   Initialize hashtable
       Hashtable row = new Hashtable();
       
-      //   Increment row offset
-      rowoffset++;
-
       Enumeration sectionLandmarksKeys = sectionLandmarks.keys();
       //   For each landmark in the section
       while (sectionLandmarksKeys.hasMoreElements()) {
@@ -340,30 +404,13 @@ public class LandmarkMatchList {
       //   Add hashtable to result
       result.add(row);
       
-      // TODO: Figure out how to determine end of section
-      isEndOfSection = true;   
-    } // End While
-    
-    
-    
-    Hashtable row = new Hashtable();
-    row.put("invoice_productid", "001");
-    row.put("invoice_description", "My first product");
-            
-    result.add(row);
-            
-    row = new Hashtable();
-    row.put("invoice_productid", "002");
-    row.put("invoice_description", "My second product");
-            
-    result.add(row);
+      //   Increment row offset
+      rowoffset++;
 
-    row = new Hashtable();
-    row.put("invoice_productid", "003");
-    row.put("invoice_description", "My third product");
-            
-    result.add(row);
-            
+      // TODO: Figure out how to determine end of section
+      isEndOfSection = checkEndOfSection(sectionLandmarks, rowoffset, sectionEndLandmarks, landmarks, sheet, evaluator, defaultDirection);
+    } // End While
+                
     return result;
   }
 }

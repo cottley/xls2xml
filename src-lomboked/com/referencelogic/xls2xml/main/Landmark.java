@@ -11,6 +11,7 @@ public class Landmark {
   protected String collectionId;
   protected String collectionIdentifier;
   protected String collectionSection;
+  protected String collectionMaxBlankLines;
   protected String row;
   protected String col;
   protected String sheetNo;

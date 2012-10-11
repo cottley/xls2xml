@@ -5,7 +5,7 @@
     <sourcefilename>D:\NotBackedUp\Development\load-production\xls2xml\test-data\data-loader\input\invoices.xlsx</sourcefilename>
     <sheetno>0</sheetno>
   </meta>
-  <invoicedate row="4" col="4">2012-10-10 12:00:00 AM</invoicedate>
+  <invoicedate row="4" col="4">2012-10-11 12:00:00 AM</invoicedate>
   <invoicenumber row="5" col="4">2.0</invoicenumber>
   <list>
         <productdetail>
@@ -13,16 +13,8 @@
           <productdesc>My first product</productdesc>
         </productdetail>  
         <productdetail>
-          <productid>001</productid>
-          <productdesc>My first product</productdesc>
-        </productdetail>  
-        <productdetail>
-          <productid>002</productid>
+          <productid>2.0</productid>
           <productdesc>My second product</productdesc>
-        </productdetail>  
-        <productdetail>
-          <productid>003</productid>
-          <productdesc>My third product</productdesc>
         </productdetail>  
 
   </list>
