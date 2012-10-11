@@ -309,6 +309,10 @@ public class LandmarkMatchList {
 
     // Get list of landmarks type "header" in section
     Hashtable sectionLandmarks = landmarks.getLandmarkIdsForIdentifierForSectionsForType(templateName, sectionName, "header");
+
+    // Get list of landmarks type "footer" in section
+    Hashtable sectionEndLandmarks = landmarks.getLandmarkIdsForIdentifierForSectionsForType(templateName, sectionName, "footer");
+
     
     // While the end of the section has not been reached
     while (!isEndOfSection) {

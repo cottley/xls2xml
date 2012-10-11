@@ -41,7 +41,7 @@
         <landmark id="invoice_unitprice">Unit Price</landmark>
         <landmark id="invoice_linetotal">Line Total</landmark>
       </collection>
-      <collection id="productdetailsfooter" section="productdetails" identifies="invoice" type="footer" maxblanklines="2">
+      <collection id="productdetailsfooter" section="productdetails" identifies="invoice" type="footer" maxblanklines="1">
         <landmark id="invoice_subtotal">Subtotal</landmark>
       </collection>      
     </landmarks>

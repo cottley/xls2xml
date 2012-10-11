@@ -33,7 +33,7 @@ public class LandmarkList {
     }
   }
 
-  public void addLandmark(String value, String landmarkid, String direction, String distance, String type, String collectionid, String identifies, String section, String row, String col, String sheetNo) {
+  public void addLandmark(String value, String landmarkid, String direction, String distance, String type, String collectionid, String identifies, String section, String maxblanklines, String row, String col, String sheetNo) {
     Landmark landmark = new Landmark();
 
     landmark.setValue(value);
@@ -44,6 +44,7 @@ public class LandmarkList {
     landmark.setCollectionId(collectionid);
     landmark.setCollectionIdentifier(identifies);
     landmark.setCollectionSection(section);
+    landmark.setCollectionMaxBlankLines(maxblanklines);
     landmark.setRow(row);
     landmark.setCol(col);
     landmark.setSheetNo(sheetNo);
