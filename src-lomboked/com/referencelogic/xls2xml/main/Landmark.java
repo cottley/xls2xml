@@ -15,5 +15,6 @@ public class Landmark {
   protected String row;
   protected String col;
   protected String sheetNo;
-
+  protected String parentLandmarkId;
+  
 }

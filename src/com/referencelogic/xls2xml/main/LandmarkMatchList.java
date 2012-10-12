@@ -191,7 +191,8 @@ public class LandmarkMatchList {
   public Hashtable getCellValueForLandmark(String landmarkId, Sheet sheet, LandmarkList landmarks, FormulaEvaluator evaluator) {
     Hashtable result = new Hashtable();    
     result.put("result", "");
-
+    result.put("lmm", new LandmarkMatch(-1,-1));
+    
     try {
       int landmarkNumber = landmarks.getLandmarkNumberFromId(landmarkId);
 
@@ -209,7 +210,7 @@ public class LandmarkMatchList {
           result.put("lmm", lmm);
 
           // Get value from sheet - row, col
-          result.put("result", getCellValue(CellUtil.getCell(CellUtil.getRow(lmm.getRow(), sheet), lmm.getCol()), evaluator));
+          result.put("result", "" + getCellValue(CellUtil.getCell(CellUtil.getRow(lmm.getRow(), sheet), lmm.getCol()), evaluator));
           
           break;
         }
@@ -225,6 +226,7 @@ public class LandmarkMatchList {
   public Hashtable getCellValueForLandmark(String landmarkId, Sheet sheet, LandmarkList landmarks, FormulaEvaluator evaluator, String defaultDirection, int rowoffset) {
     Hashtable result = new Hashtable();    
     result.put("result", "");
+    result.put("lmm", new LandmarkMatch(-1,-1));
 
     try {
       int landmarkNumber = landmarks.getLandmarkNumberFromId(landmarkId);
@@ -257,6 +259,65 @@ public class LandmarkMatchList {
   }
 
   
+  public void resolveChildLandmarks(Hashtable cellLandmarks, LandmarkList landmarks) {
+    Hashtable resolved = new Hashtable();
+    Hashtable unresolved = new Hashtable();
+  
+    Enumeration cellLandmarksKeys = cellLandmarks.keys();
+  
+    while (cellLandmarksKeys.hasMoreElements()) {
+      String key = (String) cellLandmarksKeys.nextElement();
+      // If landmark has parent, put it in unresolved
+      Landmark currentLandmark = landmarks.getLandmark(key);
+      if (currentLandmark != null) {
+        if (currentLandmark.getParentLandmarkId() != null) {
+          unresolved.put(key, key);
+        } else {
+          resolved.put(key, key);
+        }
+      }
+    }
+    
+    boolean resolvedAtLeastOne = true;
+    
+    // While unresolved keys exist
+    while (resolvedAtLeastOne) {
+      resolvedAtLeastOne = false;
+      
+      Enumeration unresolvedKeys = unresolved.keys();
+      while (unresolvedKeys.hasMoreElements()) {
+        String unresolvedKey = (String) unresolvedKeys.nextElement();
+        //   if Parent id is in resolved
+        
+        String unresolvedKeyParentId = null;
+        
+        int currentLandmarkNumber = landmarks.getLandmarkNumberFromId(unresolvedKey);
+        Landmark currentLandmark = landmarks.getLandmark(unresolvedKey);
+        if (currentLandmark != null) {
+          unresolvedKeyParentId = currentLandmark.getParentLandmarkId();
+        } 
+        
+        if (resolved.containsKey(unresolvedKeyParentId)) {
+    //     Get matches for parent
+          int parentLandmarkNumber = landmarks.getLandmarkNumberFromId(unresolvedKeyParentId);
+          ArrayList<Cell> parentLandmarkCellMatches = matches[parentLandmarkNumber];
+    
+    //     Duplicate matches for child
+    //     Modify location to follow directions
+    
+    
+    //     Put id in resolved
+          resolved.put(unresolvedKey, unresolvedKey);
+          unresolved.remove(unresolvedKey);
+          resolvedAtLeastOne = true;
+        }
+    //   end if
+      }
+
+    // End While
+    }
+  }
+  
   public Hashtable getCellTemplateValues(String templateName, Sheet sheet, LandmarkList landmarks, FormulaEvaluator evaluator, String sourcefilename, int sheetno) {
     Hashtable result = new Hashtable();
 
@@ -266,6 +327,8 @@ public class LandmarkMatchList {
 
     Enumeration cellLandmarksKeys = cellLandmarks.keys();
     
+    resolveChildLandmarks(cellLandmarks, landmarks);
+    
     result.put("xls2xml_sourcefilename", sourcefilename);
     result.put("xls2xml_sheetno", "" + sheetno);      
     
@@ -274,6 +337,7 @@ public class LandmarkMatchList {
       Hashtable value = getCellValueForLandmark(key, sheet, landmarks, evaluator);
       log.debug("Getting cell template key and value - [" + key + "," + value + "]");
       result.put(key, (String)value.get("result"));
+      log.debug("Landmark match for key is: " + value.get("lmm"));
       result.put(key + "_xls2xml_row", "" + ((LandmarkMatch)value.get("lmm")).getRow());      
       result.put(key + "_xls2xml_col", "" + ((LandmarkMatch)value.get("lmm")).getCol());      
     }

@@ -33,6 +33,10 @@
       <collection id="invoicecells" identifies="invoice" type="cells">
         <landmark id="invoicedate" direction="E" distance="1" substringsearch="false">Date</landmark>
         <landmark id="invoicenumber" direction="E" distance="1">Invoice #</landmark>
+        <landmark id="invoicebillto_line1" direction="E" distance="1">Bill To:</landmark>
+        <landmark id="invoicebillto_line2" direction="S" distance="1" parentlandmarkid="invoicebillto_line1" />
+        <landmark id="invoicebillto_line3" direction="S" distance="2" parentlandmarkid="invoicebillto_line1" />        
+        <landmark id="invoicebillto_line4" direction="S" distance="3" parentlandmarkid="invoicebillto_line1" />        
       </collection>
       <collection id="productdetailsheader" section="productdetails" identifies="invoice" type="header">
         <landmark id="invoice_productid">Product ID</landmark>

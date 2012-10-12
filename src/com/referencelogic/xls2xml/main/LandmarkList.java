@@ -33,7 +33,7 @@ public class LandmarkList {
     }
   }
 
-  public void addLandmark(String value, String landmarkid, String direction, String distance, String type, String collectionid, String identifies, String section, String maxblanklines, String row, String col, String sheetNo) {
+  public void addLandmark(String value, String landmarkid, String direction, String distance, String type, String collectionid, String identifies, String section, String maxblanklines, String row, String col, String sheetNo, String parentlandmarkid) {
     Landmark landmark = new Landmark();
 
     landmark.setValue(value);
@@ -48,6 +48,7 @@ public class LandmarkList {
     landmark.setRow(row);
     landmark.setCol(col);
     landmark.setSheetNo(sheetNo);
+    landmark.setParentLandmarkId(parentlandmarkid);
     
     log.debug(landmark);
 
@@ -61,37 +62,40 @@ public class LandmarkList {
     
     for (int i = 0; i < landmarks.size(); i++) {
       String landmarkValue = ((Landmark)landmarks.get(i)).getValue();
-      if (ignorecase) {
-         landmarkValue = landmarkValue.toUpperCase();
-         cellValue = cellValue.toUpperCase();
-         ignorecharsset = ignorecharsset.toUpperCase();
-      }
       
-      if (ignorecharsset.length() > 0) {
-        for (int charindex = 0; charindex < ignorecharsset.length(); charindex++) {
-          landmarkValue = landmarkValue.replace("" + ignorecharsset.charAt(charindex), "");
-          cellValue = cellValue.replace("" + ignorecharsset.charAt(charindex), "");
+      if (landmarkValue != null) {
+        if (ignorecase) {
+           landmarkValue = landmarkValue.toUpperCase();
+           cellValue = cellValue.toUpperCase();
+           ignorecharsset = ignorecharsset.toUpperCase();
         }
-      }
       
-      if (ignorewhitespaces) {
-        landmarkValue = landmarkValue.replaceAll("\\s", "");
-        cellValue = cellValue.replaceAll("\\s", "");
-      }
-      
-      log.trace("Landmark value before compare:'" + landmarkValue + "'");
-      log.trace("Cell value before compare:'" + cellValue + "'"); 
-      
-      if (substringsearch) {
-        if (cellValue.indexOf(landmarkValue) != -1) {
-          result.add(i);
+        if (ignorecharsset.length() > 0) {
+          for (int charindex = 0; charindex < ignorecharsset.length(); charindex++) {
+            landmarkValue = landmarkValue.replace("" + ignorecharsset.charAt(charindex), "");
+            cellValue = cellValue.replace("" + ignorecharsset.charAt(charindex), "");
+          }
         }
-      } else { // If matches
-        if (cellValue.equals(landmarkValue)) {
-          result.add(i);
-        }
-      }
       
+        if (ignorewhitespaces) {
+          landmarkValue = landmarkValue.replaceAll("\\s", "");
+          cellValue = cellValue.replaceAll("\\s", "");
+        }
+      
+        log.trace("Landmark value before compare:'" + landmarkValue + "'");
+        log.trace("Cell value before compare:'" + cellValue + "'"); 
+      
+        if (substringsearch) {
+          if (cellValue.indexOf(landmarkValue) != -1) {
+            result.add(i);
+          }
+        } else { // If matches
+          if (cellValue.equals(landmarkValue)) {
+            result.add(i);
+          }
+        }
+      
+      }
     }
     
     return result;
@@ -164,6 +168,10 @@ public class LandmarkList {
     }
 
     return result;
+  }
+  
+  public Landmark getLandmark(String landmarkId) {
+    return getLandmark(getLandmarkNumberFromId(landmarkId));
   }
 
   public ArrayList getIndexesForId(String id) {
