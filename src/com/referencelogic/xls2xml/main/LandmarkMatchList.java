@@ -259,7 +259,7 @@ public class LandmarkMatchList {
   }
 
   
-  public void resolveChildLandmarks(Hashtable cellLandmarks, LandmarkList landmarks) {
+  public void resolveChildLandmarks(Hashtable cellLandmarks, LandmarkList landmarks, Sheet sheet) {
     Hashtable resolved = new Hashtable();
     Hashtable unresolved = new Hashtable();
   
@@ -298,13 +298,28 @@ public class LandmarkMatchList {
         } 
         
         if (resolved.containsKey(unresolvedKeyParentId)) {
+          log.debug("Landmark " + unresolvedKey + " has parent " + unresolvedKeyParentId);
     //     Get matches for parent
           int parentLandmarkNumber = landmarks.getLandmarkNumberFromId(unresolvedKeyParentId);
           ArrayList<Cell> parentLandmarkCellMatches = matches[parentLandmarkNumber];
     
     //     Duplicate matches for child
     //     Modify location to follow directions
-    
+          for (Cell cell : parentLandmarkCellMatches) {
+             int childCellRow = -1;
+             int childCellCol = -1;
+
+             // Get the location of the cell after the parent direction and child direction applied
+             LandmarkMatch lmm = getDataLocationUsingLandmark(landmarks.getLandmark(parentLandmarkNumber), cell);
+
+             childCellRow = lmm.getRow();
+             childCellCol = lmm.getCol();
+
+             log.debug("Adding cell match for landmark " + unresolvedKey + " with row " + childCellRow + " and col " + childCellCol);
+
+             Cell childCell = CellUtil.getCell(CellUtil.getRow(childCellRow, sheet), childCellCol);
+             matches[currentLandmarkNumber].add(childCell);
+          }
     
     //     Put id in resolved
           resolved.put(unresolvedKey, unresolvedKey);
@@ -327,7 +342,7 @@ public class LandmarkMatchList {
 
     Enumeration cellLandmarksKeys = cellLandmarks.keys();
     
-    resolveChildLandmarks(cellLandmarks, landmarks);
+    resolveChildLandmarks(cellLandmarks, landmarks, sheet);
     
     result.put("xls2xml_sourcefilename", sourcefilename);
     result.put("xls2xml_sheetno", "" + sheetno);      
@@ -499,7 +514,6 @@ public class LandmarkMatchList {
       //   Increment row offset
       rowoffset++;
 
-      // TODO: Figure out how to determine end of section
       isEndOfSection = checkEndOfSection(sectionLandmarks, rowoffset, sectionEndLandmarks, landmarks, sheet, evaluator, defaultDirection);
     } // End While
                 
