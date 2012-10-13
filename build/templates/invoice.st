@@ -2,21 +2,87 @@
   <meta>
     <sourcefilename>$xls2xml_sourcefilename$</sourcefilename>
     <sheetno>$xls2xml_sheetno$</sheetno>
+$!
+    <invoicedate>
+      <row>$invoicedate_xls2xml_row$</row>
+      <col>$invoicedate_xls2xml_col$</col>
+    </invoicedate>
+    <invoicenumber>
+      <row>$invoicenumber_xls2xml_row$</row>
+      <col>$invoicenumber_xls2xml_col$</col>
+    </invoicenumber>
+    <invoicebillto>
+      <name>
+        <row>$invoicebillto_line1_xls2xml_row$</row>
+        <col>$invoicebillto_line1_xls2xml_col$</col>
+      </name>
+      <addressline1>
+        <row>$invoicebillto_line2_xls2xml_row$</row>
+        <col>$invoicebillto_line2_xls2xml_col$</col>
+      </addressline1>
+      <addressline2>
+        <row>$invoicebillto_line3_xls2xml_row$</row>
+        <col>$invoicebillto_line3_xls2xml_col$</col>
+      </addressline2>
+      <addressline3>
+        <row>$invoicebillto_line4_xls2xml_row$</row>
+        <col>$invoicebillto_line4_xls2xml_col$</col>
+      </addressline3>
+    </invoicebillto>
+    <list>
+      $productdetails:{ productdetail |
+      <productdetail>
+        <productid> 
+          <row>$productdetail.invoice_productid_xls2xml_row$</row>
+          <col>$productdetail.invoice_productid_xls2xml_col$</col>
+        </productid>
+        <productdesc>
+          <row>$productdetail.invoice_description_xls2xml_row$</row>
+          <col>$productdetail.invoice_description_xls2xml_col$></col>
+        </productdesc>
+      </productdetail>  
+      }$
+    </list>
+!$
   </meta>
-  <invoicedate row="$invoicedate_xls2xml_row$" col="$invoicedate_xls2xml_col$">$invoicedate$</invoicedate>
-  <invoicenumber row="$invoicenumber_xls2xml_row$" col="$invoicenumber_xls2xml_col$">$invoicenumber$</invoicenumber>
+  <invoicedate>$invoicedate$</invoicedate>
+  <invoicenumber>$invoicenumber$</invoicenumber>
+  <invoicecompany>
+    <addressline1>$invoicecompanystreet$</addressline1>
+    <addressline2>$invoicecompanytown$</addressline2>
+    <contact>$invoicecompanycontact$</contact>
+    <website>$invoicecompanywebsite$</website>
+  </invoicecompany>
   <invoicebillto>
-    <name row="$invoicebillto_line1_xls2xml_row$" col="$invoicebillto_line1_xls2xml_col$">$invoicebillto_line1$</name>
+    <name>$invoicebillto_line1$</name>
     <addressline1>$invoicebillto_line2$</addressline1>
     <addressline2>$invoicebillto_line3$</addressline2>
     <addressline3>$invoicebillto_line4$</addressline3>    
   </invoicebillto>
+  <invoiceserviceto>
+    <name>$invoiceserviceto_line1$</name>
+    <addressline1>$invoiceserviceto_line2$</addressline1>
+    <addressline2>$invoiceserviceto_line3$</addressline2>
+    <addressline3>$invoiceserviceto_line4$</addressline3>    
+  </invoiceserviceto>
+  <ponumber>$ponumber$</ponumber>
+  <salesrep>$salesrep$</salesrep>
+  <servicedate>$servicedate$</servicedate>
+  <terms>$terms$</terms>
+  <duedate>$duedate$</duedate>
   <list>
     $productdetails:{ productdetail |
     <productdetail>
-      <productid row="$productdetail.invoice_productid_xls2xml_row$" col="$productdetail.invoice_productid_xls2xml_col$">$productdetail.invoice_productid$</productid>
-      <productdesc row="$productdetail.invoice_description_xls2xml_row$" col="$productdetail.invoice_description_xls2xml_col$">$productdetail.invoice_description$</productdesc>
+      <productid>$productdetail.invoice_productid$</productid>
+      <productdesc>$productdetail.invoice_description$</productdesc>
     </productdetail>  
     }$
   </list>
+  <notes>$notes$</notes>
+  <subtotal>$subtotal$</subtotal>
+  <discountpercent>$discountpercent$</discountpercent>
+  <discountamount>$discountamount$</discountamount>
+  <total>$total$</total>
+  <paid>$paid$</paid>
+  <totaldue>$totaldue$</totaldue>
 </invoice>

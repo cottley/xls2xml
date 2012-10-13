@@ -33,7 +33,7 @@ public class LandmarkList {
     }
   }
 
-  public void addLandmark(String value, String landmarkid, String direction, String distance, String type, String collectionid, String identifies, String section, String maxblanklines, String row, String col, String sheetNo, String parentlandmarkid) {
+  public void addLandmark(String value, String landmarkid, String direction, String distance, String type, String collectionid, String identifies, String section, String maxblanklines, String row, String col, String sheetNo, String parentlandmarkid, String substringsearch, String matchnumber) {
     Landmark landmark = new Landmark();
 
     landmark.setValue(value);
@@ -49,7 +49,9 @@ public class LandmarkList {
     landmark.setCol(col);
     landmark.setSheetNo(sheetNo);
     landmark.setParentLandmarkId(parentlandmarkid);
-    
+    landmark.setSubstringSearch(substringsearch);
+    landmark.setMatchNumber(matchnumber);
+
     log.debug(landmark);
 
     landmarks.add(landmark);
@@ -61,31 +63,65 @@ public class LandmarkList {
     String ignorecharsset = ignorechars;
     
     for (int i = 0; i < landmarks.size(); i++) {
-      String landmarkValue = ((Landmark)landmarks.get(i)).getValue();
+      Landmark currentLandmark = (Landmark)landmarks.get(i); 
+      String landmarkValue = currentLandmark.getValue();
       
       if (landmarkValue != null) {
-        if (ignorecase) {
+
+        boolean ignorecaselandmark = ignorecase;
+        if (currentLandmark.getIgnoreCase() != null) {
+          if (currentLandmark.getIgnoreCase().equalsIgnoreCase("true")) {
+            ignorecaselandmark = true;
+          } else if (currentLandmark.getIgnoreCase().equalsIgnoreCase("false")) {
+            ignorecaselandmark = false;
+          }
+        }
+
+        if (ignorecaselandmark) {
            landmarkValue = landmarkValue.toUpperCase();
            cellValue = cellValue.toUpperCase();
            ignorecharsset = ignorecharsset.toUpperCase();
         }
+
+        String ignorecharssetlandmark = ignorecharsset;
+        if (currentLandmark.getIgnoreChars() != null) {
+          ignorecharssetlandmark = currentLandmark.getIgnoreChars();
+        }
       
-        if (ignorecharsset.length() > 0) {
-          for (int charindex = 0; charindex < ignorecharsset.length(); charindex++) {
-            landmarkValue = landmarkValue.replace("" + ignorecharsset.charAt(charindex), "");
-            cellValue = cellValue.replace("" + ignorecharsset.charAt(charindex), "");
+        if (ignorecharssetlandmark.length() > 0) {
+          for (int charindex = 0; charindex < ignorecharssetlandmark.length(); charindex++) {
+            landmarkValue = landmarkValue.replace("" + ignorecharssetlandmark.charAt(charindex), "");
+            cellValue = cellValue.replace("" + ignorecharssetlandmark.charAt(charindex), "");
+          }
+        }
+
+        boolean ignorewhitespaceslandmark = ignorewhitespaces;
+        if (currentLandmark.getIgnoreWhitespaces() != null) {
+          if (currentLandmark.getIgnoreWhitespaces().equalsIgnoreCase("true")) {
+            ignorewhitespaceslandmark = true;
+          } else if (currentLandmark.getIgnoreWhitespaces().equalsIgnoreCase("false")) {
+            ignorewhitespaceslandmark = false;
           }
         }
       
-        if (ignorewhitespaces) {
+        if (ignorewhitespaceslandmark) {
           landmarkValue = landmarkValue.replaceAll("\\s", "");
           cellValue = cellValue.replaceAll("\\s", "");
         }
       
         log.trace("Landmark value before compare:'" + landmarkValue + "'");
         log.trace("Cell value before compare:'" + cellValue + "'"); 
+ 
+        boolean substringsearchforcurrentlandmark = substringsearch;
+        if (currentLandmark.getSubstringSearch() != null) {
+          if (currentLandmark.getSubstringSearch().equalsIgnoreCase("true")) {
+            substringsearchforcurrentlandmark = true;
+          } else if (currentLandmark.getSubstringSearch().equalsIgnoreCase("false")) {
+            substringsearchforcurrentlandmark = false;
+          }
+        }
       
-        if (substringsearch) {
+        if (substringsearchforcurrentlandmark) {
           if (cellValue.indexOf(landmarkValue) != -1) {
             result.add(i);
           }

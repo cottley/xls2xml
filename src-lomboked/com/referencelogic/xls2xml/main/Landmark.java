@@ -16,5 +16,10 @@ public class Landmark {
   protected String col;
   protected String sheetNo;
   protected String parentLandmarkId;
+  protected String substringSearch;
+  protected String matchNumber;
+  protected String ignoreCase;
+  protected String ignoreWhitespaces;
+  protected String ignoreChars;
   
 }

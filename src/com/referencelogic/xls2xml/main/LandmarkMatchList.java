@@ -193,8 +193,20 @@ public class LandmarkMatchList {
     result.put("result", "");
     result.put("lmm", new LandmarkMatch(-1,-1));
     
+    int count = 0;
+    int matchnumber = 1; // By default return the first match
+
     try {
       int landmarkNumber = landmarks.getLandmarkNumberFromId(landmarkId);
+
+      Landmark currentLandmark = landmarks.getLandmark(landmarkNumber);
+      if (currentLandmark.getMatchNumber() != null) {
+        try {
+          matchnumber = Integer.parseInt(currentLandmark.getMatchNumber());
+        } catch (Exception inte) {
+          log.warn("Unable to parse match number as integer", inte);
+        }
+      }
 
       // Get match index for landmark
       ArrayList<Cell> landmarkCellMatches = matches[landmarkNumber];
@@ -204,6 +216,7 @@ public class LandmarkMatchList {
 
         // If the cell is for the sheet
         if (cell.getSheet().equals(sheet)) {
+          count++;
 
           // Get updated X,y location
           LandmarkMatch lmm = getDataLocationUsingLandmark(landmarks.getLandmark(landmarkNumber), cell);
@@ -212,7 +225,9 @@ public class LandmarkMatchList {
           // Get value from sheet - row, col
           result.put("result", "" + getCellValue(CellUtil.getCell(CellUtil.getRow(lmm.getRow(), sheet), lmm.getCol()), evaluator));
           
-          break;
+          if (count >= matchnumber) {
+            break;
+          }
         }
 
       }
@@ -228,8 +243,20 @@ public class LandmarkMatchList {
     result.put("result", "");
     result.put("lmm", new LandmarkMatch(-1,-1));
 
+    int count = 0;
+    int matchnumber = 1; // By default return the first match
+
     try {
       int landmarkNumber = landmarks.getLandmarkNumberFromId(landmarkId);
+
+      Landmark currentLandmark = landmarks.getLandmark(landmarkNumber);
+      if (currentLandmark.getMatchNumber() != null) {
+        try {
+          matchnumber = Integer.parseInt(currentLandmark.getMatchNumber());
+        } catch (Exception inte) {
+          log.warn("Unable to parse match number as integer", inte);
+        }
+      }
 
       // Get match index for landmark
       ArrayList<Cell> landmarkCellMatches = matches[landmarkNumber];
@@ -239,6 +266,7 @@ public class LandmarkMatchList {
 
         // If the cell is for the sheet
         if (cell.getSheet().equals(sheet)) {
+          count++;
 
           // Get updated X,y location
           LandmarkMatch lmm = getDataLocationUsingLandmark(landmarks.getLandmark(landmarkNumber), cell, defaultDirection, rowoffset);
@@ -247,7 +275,9 @@ public class LandmarkMatchList {
           // Get value from sheet - row, col
           result.put("result", getCellValue(CellUtil.getCell(CellUtil.getRow(lmm.getRow(), sheet), lmm.getCol()), evaluator));
           
-          break;
+          if (count >= matchnumber) { 
+            break;
+          }
         }
 
       }
@@ -314,6 +344,9 @@ public class LandmarkMatchList {
 
              childCellRow = lmm.getRow();
              childCellCol = lmm.getCol();
+
+             if (childCellRow < 0) { childCellRow = 0; }
+             if (childCellCol < 0) { childCellCol = 0; }
 
              log.debug("Adding cell match for landmark " + unresolvedKey + " with row " + childCellRow + " and col " + childCellCol);
 
