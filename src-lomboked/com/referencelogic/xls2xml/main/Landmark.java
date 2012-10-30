@@ -21,5 +21,6 @@ public class Landmark {
   protected String ignoreCase;
   protected String ignoreWhitespaces;
   protected String ignoreChars;
+  protected String ignoreFormatting;
   
 }

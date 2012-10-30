@@ -94,6 +94,10 @@ public class LandmarkMatchList {
   }
 
   public String getCellValue(Cell cell, FormulaEvaluator evaluator) {
+     return getCellValue(cell, evaluator, false);
+  }
+
+  public String getCellValue(Cell cell, FormulaEvaluator evaluator, boolean ignoreformatting) {
     SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss a");
 
     String cellvalue = "";
@@ -103,7 +107,7 @@ public class LandmarkMatchList {
                     cellvalue = cell.getRichStringCellValue().getString();
                     break;
                 case Cell.CELL_TYPE_NUMERIC:
-                    if (DateUtil.isCellDateFormatted(cell)) {
+                    if ((!ignoreformatting) && (DateUtil.isCellDateFormatted(cell))) {
                         cellvalue = "" + format.format(cell.getDateCellValue());
                     } else {
                         cellvalue = "" + cell.getNumericCellValue();
@@ -121,7 +125,7 @@ public class LandmarkMatchList {
                           cellvalue = "" + cellValue.getBooleanValue();
                           break;
                       case Cell.CELL_TYPE_NUMERIC:
-                          if (!isDouble(dataFormatter.formatCellValue(cell, evaluator))) {
+                          if ((!ignoreformatting) && (!isDouble(dataFormatter.formatCellValue(cell, evaluator)))) {
                             cellvalue = "" + format.format(DateUtil.getJavaDate(cellValue.getNumberValue()));
                           } else {
                             cellvalue = "" + cellValue.getNumberValue();
@@ -137,8 +141,8 @@ public class LandmarkMatchList {
             }
 
      return cellvalue;
-  }
-
+  }  
+  
   public LandmarkMatch getDataLocationUsingLandmark(Landmark landmark, Cell cell) {
     LandmarkMatch result = new LandmarkMatch(-1, -1);
 
@@ -207,6 +211,11 @@ public class LandmarkMatchList {
           log.warn("Unable to parse match number as integer", inte);
         }
       }
+      
+      boolean ignoreformatting = false;
+      if (currentLandmark.getIgnoreFormatting().equalsIgnoreCase("true")) {
+        ignoreformatting = true;
+      }
 
       // Get match index for landmark
       ArrayList<Cell> landmarkCellMatches = matches[landmarkNumber];
@@ -219,11 +228,11 @@ public class LandmarkMatchList {
           count++;
 
           // Get updated X,y location
-          LandmarkMatch lmm = getDataLocationUsingLandmark(landmarks.getLandmark(landmarkNumber), cell);
+          LandmarkMatch lmm = getDataLocationUsingLandmark(currentLandmark, cell);
           result.put("lmm", lmm);
 
           // Get value from sheet - row, col
-          result.put("result", "" + getCellValue(CellUtil.getCell(CellUtil.getRow(lmm.getRow(), sheet), lmm.getCol()), evaluator));
+          result.put("result", "" + getCellValue(CellUtil.getCell(CellUtil.getRow(lmm.getRow(), sheet), lmm.getCol()), evaluator, ignoreformatting));
           
           if (count >= matchnumber) {
             break;
@@ -258,6 +267,11 @@ public class LandmarkMatchList {
         }
       }
 
+      boolean ignoreformatting = false;
+      if (currentLandmark.getIgnoreFormatting().equalsIgnoreCase("true")) {
+        ignoreformatting = true;
+      }
+      
       // Get match index for landmark
       ArrayList<Cell> landmarkCellMatches = matches[landmarkNumber];
 
@@ -267,13 +281,13 @@ public class LandmarkMatchList {
         // If the cell is for the sheet
         if (cell.getSheet().equals(sheet)) {
           count++;
-
+          
           // Get updated X,y location
-          LandmarkMatch lmm = getDataLocationUsingLandmark(landmarks.getLandmark(landmarkNumber), cell, defaultDirection, rowoffset);
+          LandmarkMatch lmm = getDataLocationUsingLandmark(currentLandmark, cell, defaultDirection, rowoffset);
           result.put("lmm", lmm);
-
+          
           // Get value from sheet - row, col
-          result.put("result", getCellValue(CellUtil.getCell(CellUtil.getRow(lmm.getRow(), sheet), lmm.getCol()), evaluator));
+          result.put("result", getCellValue(CellUtil.getCell(CellUtil.getRow(lmm.getRow(), sheet), lmm.getCol()), evaluator, ignoreformatting));
           
           if (count >= matchnumber) { 
             break;

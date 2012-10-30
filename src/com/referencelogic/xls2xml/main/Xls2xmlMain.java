@@ -1,10 +1,6 @@
 /*
- * Copyright (c) 2004-2010, P. Simon Tuffs (simon@simontuffs.com)
+ * Copyright (c) 2012, Reference Logic
  * All rights reserved.
- *
- * See the full license at http://one-jar.sourceforge.net/one-jar-license.html
- * This license is also included in the distributions of this software
- * under doc/one-jar-license.txt
  */
 package com.referencelogic.xls2xml.main;
 
@@ -66,8 +62,9 @@ public class Xls2xmlMain {
           String parentlandmarkid = landsub.getString("[@parentlandmarkid]");
           String substringsearch = landsub.getString("[@substringsearch]");
           String matchnumber = landsub.getString("[@matchnumber]");
+          String ignoreformatting = landsub.getString("[@ignoreformatting]");
           
-          landmarks.addLandmark(value, landmarkid, direction, distance, type, collectionid, identifies, section, maxblanklines, row, col, sheetNo, parentlandmarkid, substringsearch, matchnumber);
+          landmarks.addLandmark(value, landmarkid, direction, distance, type, collectionid, identifies, section, maxblanklines, row, col, sheetNo, parentlandmarkid, substringsearch, matchnumber, ignoreformatting);
         }
       }
     }
