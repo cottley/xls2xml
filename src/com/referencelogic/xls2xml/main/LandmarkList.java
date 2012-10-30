@@ -33,7 +33,7 @@ public class LandmarkList {
     }
   }
 
-  public void addLandmark(String value, String landmarkid, String direction, String distance, String type, String collectionid, String identifies, String section, String maxblanklines, String row, String col, String sheetNo, String parentlandmarkid, String substringsearch, String matchnumber, String ignoreformatting) {
+  public void addLandmark(String value, String landmarkid, String direction, String distance, String type, String collectionid, String identifies, String section, String maxblanklines, String row, String col, String sheetNo, String parentlandmarkid, String substringsearch, String matchnumber, String ignorecase, String ignorewhitespaces, String ignorechars, String ignoreformatting) {
     Landmark landmark = new Landmark();
 
     landmark.setValue(value);
@@ -51,6 +51,9 @@ public class LandmarkList {
     landmark.setParentLandmarkId(parentlandmarkid);
     landmark.setSubstringSearch(substringsearch);
     landmark.setMatchNumber(matchnumber);
+    landmark.setIgnoreCase(ignorecase);
+    landmark.setIgnoreWhitespaces(ignorewhitespaces);
+    landmark.setIgnoreChars(ignorechars);
     landmark.setIgnoreFormatting(ignoreformatting);
     
     log.debug(landmark);

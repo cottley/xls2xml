@@ -62,9 +62,12 @@ public class Xls2xmlMain {
           String parentlandmarkid = landsub.getString("[@parentlandmarkid]");
           String substringsearch = landsub.getString("[@substringsearch]");
           String matchnumber = landsub.getString("[@matchnumber]");
+          String ignorecase = landsub.getString("[@ignorecase]");
+	        String ignorewhitespaces = landsub.getString("[@ignorewhitespaces]");
+	        String ignorechars =  landsub.getString("[@ignorechars]");
           String ignoreformatting = landsub.getString("[@ignoreformatting]");
           
-          landmarks.addLandmark(value, landmarkid, direction, distance, type, collectionid, identifies, section, maxblanklines, row, col, sheetNo, parentlandmarkid, substringsearch, matchnumber, ignoreformatting);
+          landmarks.addLandmark(value, landmarkid, direction, distance, type, collectionid, identifies, section, maxblanklines, row, col, sheetNo, parentlandmarkid, substringsearch, matchnumber, ignorecase, ignorewhitespaces, ignorechars, ignoreformatting);
         }
       }
     }
