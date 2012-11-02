@@ -1,4 +1,4 @@
-<invoice>
+<Invoice>
   <meta>
     <sourcefilename>$xls2xml_sourcefilename$</sourcefilename>
     <sheetno>$xls2xml_sheetno$</sheetno>
@@ -70,14 +70,14 @@ $!
   <servicedate>$servicedate$</servicedate>
   <terms>$terms$</terms>
   <duedate>$duedate$</duedate>
-  <list>
+  <productdetails>
     $productdetails:{ productdetail |
     <productdetail>
       <productid>$productdetail.invoice_productid$</productid>
       <productdesc>$productdetail.invoice_description$</productdesc>
     </productdetail>  
     }$
-  </list>
+  </productdetails>
   <notes>$notes$</notes>
   <subtotal>$subtotal$</subtotal>
   <discountpercent>$discountpercent$</discountpercent>
@@ -85,4 +85,4 @@ $!
   <total>$total$</total>
   <paid>$paid$</paid>
   <totaldue>$totaldue$</totaldue>
-</invoice>
+</Invoice>

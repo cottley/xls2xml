@@ -26,7 +26,7 @@ public class Xls2xmlMain {
     
     private static final Logger log = Logger.getLogger( Xls2xmlMain.class );
     private static boolean isDebugging;
-    private static final String configFileName = "xsl2xml.config.xml";
+    private static final String configFileName = "xls2xml.config.xml";
     private ExecutorService exec;
     public LandmarkList landmarks;
     

@@ -1,52 +1,43 @@
 <?xml version="1.0" encoding="ISO-8859-1" ?>
 <list>
-<invoice>
+<Invoice>
   <meta>
-    <sourcefilename>/home/cottley/Development/xls2xml/test-data/data-loader/input/invoices.xlsx</sourcefilename>
+    <sourcefilename>D:\NotBackedUp\Development\load-production\xls2xml\test-data\data-loader\input\invoices.xlsx</sourcefilename>
     <sheetno>0</sheetno>
   </meta>
-  <invoicedate>2012-10-13 12:00:00 AM</invoicedate>
-  <invoicenumber>2.0</invoicenumber>
+  <invoicedate></invoicedate>
+  <invoicenumber></invoicenumber>
   <invoicecompany>
-    <addressline1>123 Main Street</addressline1>
-    <addressline2>Anytown, USA 01234</addressline2>
-    <contact>Phone: (800) 123-4567   email:info@invoice.com</contact>
-    <website>http://invoice.com</website>
+    <addressline1></addressline1>
+    <addressline2></addressline2>
+    <contact></contact>
+    <website></website>
   </invoicecompany>
   <invoicebillto>
-    <name>John Smith</name>
-    <addressline1>#4 Some place</addressline1>
-    <addressline2>Some city</addressline2>
-    <addressline3>Some country</addressline3>    
+    <name></name>
+    <addressline1></addressline1>
+    <addressline2></addressline2>
+    <addressline3></addressline3>    
   </invoicebillto>
   <invoiceserviceto>
-    <name>Jane Smith</name>
-    <addressline1>#4 Some place</addressline1>
-    <addressline2>Some city</addressline2>
-    <addressline3>Some country</addressline3>    
+    <name></name>
+    <addressline1></addressline1>
+    <addressline2></addressline2>
+    <addressline3></addressline3>    
   </invoiceserviceto>
-  <ponumber>12345.0</ponumber>
-  <salesrep>Some guy</salesrep>
-  <servicedate>2012-10-13 12:00:00 AM</servicedate>
-  <terms>Full payment due on delivery</terms>
-  <duedate>2012-10-13 12:00:00 AM</duedate>
-  <list>
-        <productdetail>
-          <productid>1.0</productid>
-          <productdesc>My first product</productdesc>
-        </productdetail>  
-        <productdetail>
-          <productid>2.0</productid>
-          <productdesc>My second product</productdesc>
-        </productdetail>  
-
-  </list>
-  <notes>Here are some notes</notes>
-  <subtotal>60.0</subtotal>
-  <discountpercent>0.05</discountpercent>
-  <discountamount>3.0</discountamount>
-  <total>57.0</total>
-  <paid>0.0</paid>
-  <totaldue>57.0</totaldue>
-</invoice>
+  <ponumber></ponumber>
+  <salesrep></salesrep>
+  <servicedate></servicedate>
+  <terms></terms>
+  <duedate></duedate>
+  <productdetails>
+  </productdetails>
+  <notes></notes>
+  <subtotal></subtotal>
+  <discountpercent></discountpercent>
+  <discountamount></discountamount>
+  <total></total>
+  <paid></paid>
+  <totaldue></totaldue>
+</Invoice>
 </list>
