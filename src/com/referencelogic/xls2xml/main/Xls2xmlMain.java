@@ -19,6 +19,7 @@ import java.util.List;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.configuration.HierarchicalConfiguration;
 
@@ -93,6 +94,13 @@ public class Xls2xmlMain {
         }
         
         exec.shutdown();
+        try {
+          while(!exec.isTerminated()) {
+            exec.awaitTermination(30, TimeUnit.SECONDS); 
+          }
+        } catch (InterruptedException ie) {
+          // Do nothing, going to exit anyway
+        }
 
       } catch(ConfigurationException cex) {
         log.fatal("Unable to load config file " + configFileName + " to determine configuration.", cex);

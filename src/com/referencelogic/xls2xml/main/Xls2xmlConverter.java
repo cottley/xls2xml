@@ -74,6 +74,8 @@ public class Xls2xmlConverter implements Runnable {
       
         Sheet sheet = input.getSheetAt(sheetno);
         
+        log.debug("Processing sheet #" + sheetno + ": " + sheet.getSheetName());
+        
         LandmarkMatchList lml = new LandmarkMatchList(landmarks.size());
         
         for (Row row : sheet) {
@@ -137,6 +139,8 @@ public class Xls2xmlConverter implements Runnable {
       log.error("Unable to open " + file.toString() + " as an Excel file.", ioe);
     } catch (InvalidFormatException ife) {
       log.error("Unable to open " + file.toString() + ". Format not recognized as Excel. ", ife);    
+    } catch (IllegalArgumentException iae) {
+      log.error("Unable to open " + file.toString() + " as an Excel file.", iae);    
     }
     return result;
   }
@@ -157,14 +161,22 @@ public class Xls2xmlConverter implements Runnable {
         FileUtils.touch(destFile);
         if (isDebugging) { log.debug("Created destination file: " + destFilePath); }
         // Put some XML in the file
+        
+        String processedXML = process2xml();
+        
         BufferedWriter output = new BufferedWriter(new FileWriter(destFile));
-        output.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?>");
-        output.newLine();
-        String roottag = config.getString("conversion.tags.root");
-        output.append("<" + roottag + ">");
-        output.newLine();
-        output.append(process2xml());
-        output.append("</" + roottag + ">");
+
+        // Only write data to the file if there is data from the processing
+        if (!processedXML.equals("")) {
+          output.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?>");
+          output.newLine();
+          String roottag = config.getString("conversion.tags.root");
+          output.append("<" + roottag + ">");
+          output.newLine();
+          output.append(processedXML);
+          output.append("</" + roottag + ">");
+        }
+        
         output.close();        
       } catch (IOException ioe) {
         log.error("Could not create destination file: " + destFilePath, ioe);

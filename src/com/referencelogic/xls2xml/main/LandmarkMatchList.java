@@ -62,7 +62,11 @@ public class LandmarkMatchList {
       }
     }
     
-    log.debug("Got template name: " + result);
+    if (result.equals("")) {
+      log.debug("Unable to find matching template name for worksheet");
+    } else {
+      log.debug("Got template name: " + result);
+    }
     
     return result;
   }
@@ -117,23 +121,33 @@ public class LandmarkMatchList {
                     cellvalue = "" + cell.getBooleanCellValue();
                     break;
                 case Cell.CELL_TYPE_FORMULA:
+                    try { cellvalue = cell.getRichStringCellValue().getString(); } catch (Exception e) { } 
+                    try { cellvalue = "" + cell.getNumericCellValue(); } catch (Exception e) { } 
+                    try { cellvalue = "" + cell.getBooleanCellValue(); } catch (Exception e) { } 
+                    
+                    try {
                 
-                    CellValue cellValue = evaluator.evaluate(cell);
+                      CellValue cellValue = evaluator.evaluate(cell);
 
-                    switch (cellValue.getCellType()) {
-                      case Cell.CELL_TYPE_BOOLEAN:
+                      switch (cellValue.getCellType()) {
+                        case Cell.CELL_TYPE_BOOLEAN:
                           cellvalue = "" + cellValue.getBooleanValue();
                           break;
-                      case Cell.CELL_TYPE_NUMERIC:
+                        case Cell.CELL_TYPE_NUMERIC:
                           if ((!ignoreformatting) && (!isDouble(dataFormatter.formatCellValue(cell, evaluator)))) {
                             cellvalue = "" + format.format(DateUtil.getJavaDate(cellValue.getNumberValue()));
                           } else {
                             cellvalue = "" + cellValue.getNumberValue();
                           }
                           break;
-                      case Cell.CELL_TYPE_STRING:
+                        case Cell.CELL_TYPE_STRING:
                           cellvalue = "" + cellValue.getStringValue();
                           break;
+                      }
+                    
+                    } catch (Exception e) {
+                      log.error("Could not get formula value for cell at row " + cell.getRowIndex() + " and col " + cell.getColumnIndex(), e);
+                      log.error("Formula cell value used as " + cellvalue);
                     }
                   
                     break;
@@ -204,17 +218,23 @@ public class LandmarkMatchList {
       int landmarkNumber = landmarks.getLandmarkNumberFromId(landmarkId);
 
       Landmark currentLandmark = landmarks.getLandmark(landmarkNumber);
-      if (currentLandmark.getMatchNumber() != null) {
-        try {
-          matchnumber = Integer.parseInt(currentLandmark.getMatchNumber());
-        } catch (Exception inte) {
-          log.warn("Unable to parse match number as integer", inte);
+      if (currentLandmark != null) {
+        if (currentLandmark.getMatchNumber() != null) {
+          try {
+            matchnumber = Integer.parseInt(currentLandmark.getMatchNumber());
+          } catch (Exception inte) {
+            log.warn("Unable to parse match number as integer", inte);
+          }
         }
       }
       
       boolean ignoreformatting = false;
-      if (currentLandmark.getIgnoreFormatting().equalsIgnoreCase("true")) {
-        ignoreformatting = true;
+      if (currentLandmark != null) {
+        if (currentLandmark.getIgnoreFormatting() != null) {
+          if (currentLandmark.getIgnoreFormatting().equalsIgnoreCase("true")) {
+            ignoreformatting = true;
+          }
+        }
       }
 
       // Get match index for landmark
@@ -259,17 +279,23 @@ public class LandmarkMatchList {
       int landmarkNumber = landmarks.getLandmarkNumberFromId(landmarkId);
 
       Landmark currentLandmark = landmarks.getLandmark(landmarkNumber);
-      if (currentLandmark.getMatchNumber() != null) {
-        try {
-          matchnumber = Integer.parseInt(currentLandmark.getMatchNumber());
-        } catch (Exception inte) {
-          log.warn("Unable to parse match number as integer", inte);
+      if (currentLandmark != null) {
+        if (currentLandmark.getMatchNumber() != null) {
+          try {
+            matchnumber = Integer.parseInt(currentLandmark.getMatchNumber());
+          } catch (Exception inte) {
+            log.warn("Unable to parse match number as integer", inte);
+          }
         }
       }
-
+      
       boolean ignoreformatting = false;
-      if (currentLandmark.getIgnoreFormatting().equalsIgnoreCase("true")) {
-        ignoreformatting = true;
+      if (currentLandmark != null) {
+        if (currentLandmark.getIgnoreFormatting() != null) {
+          if (currentLandmark.getIgnoreFormatting().equalsIgnoreCase("true")) {
+            ignoreformatting = true;
+          }
+        }
       }
       
       // Get match index for landmark
