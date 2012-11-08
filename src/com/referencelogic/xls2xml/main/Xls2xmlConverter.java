@@ -141,6 +141,8 @@ public class Xls2xmlConverter implements Runnable {
       log.error("Unable to open " + file.toString() + ". Format not recognized as Excel. ", ife);    
     } catch (IllegalArgumentException iae) {
       log.error("Unable to open " + file.toString() + " as an Excel file.", iae);    
+    } catch (Exception e) {
+      log.error("Unable to open " + file.toString() + " as an Excel file.", e);    
     }
     return result;
   }
