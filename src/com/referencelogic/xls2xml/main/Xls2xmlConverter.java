@@ -124,17 +124,14 @@ public class Xls2xmlConverter implements Runnable {
             
             result += st.render();
           } else {
-            log.error("Unable to load template " + templateName + ".st! Cannot render data to template.");
+            log.error("Unable to load template " + templateName + ".st! Cannot render data to template while processing " 
+              + file.toString() + " sheet number " + sheetno);
           }
         
         }
         
       }
       
-        
-          
-
-
     } catch (IOException ioe) {
       log.error("Unable to open " + file.toString() + " as an Excel file.", ioe);
     } catch (InvalidFormatException ife) {

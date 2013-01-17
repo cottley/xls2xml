@@ -6,6 +6,7 @@ package com.referencelogic.xls2xml.main;
 
 import java.util.Arrays;
 import java.io.File;
+import java.io.IOException;
 import org.apache.commons.io.FileUtils;
 import java.util.Iterator;
 
@@ -28,12 +29,19 @@ public class Xls2xmlMain {
     private static final Logger log = Logger.getLogger( Xls2xmlMain.class );
     private static boolean isDebugging;
     private static final String configFileName = "xls2xml.config.xml";
+    private static boolean runModifiedOnly = false;
     private ExecutorService exec;
     public LandmarkList landmarks;
     
     public static void main(String args[]) {
         PropertyConfigurator.configure("log4j.properties");
-         isDebugging = log.isDebugEnabled();
+        isDebugging = log.isDebugEnabled();
+        for (String s : args)
+        {
+          if (s.equalsIgnoreCase("--modified")) {
+            runModifiedOnly = true;
+          }
+        }
         new Xls2xmlMain().run();
     }
     
@@ -88,9 +96,34 @@ public class Xls2xmlMain {
 
         exec = Executors.newFixedThreadPool(poolSize);
         
+        long lastmodifieddatetime = 0L;
+
+        File modifiedfile  = new File("xls2xml.modified");
+        if (isDebugging) { log.debug("Created new modified file."); }
+        
+        if (runModifiedOnly) {
+          // If file exists
+          if (modifiedfile.exists()) {
+            // Get last modified date for file
+            lastmodifieddatetime = modifiedfile.lastModified();
+          }
+        }
+        
+        try {
+          modifiedfile.delete();
+          if (isDebugging) { log.debug("Tried to delete modified file tracker"); }
+          modifiedfile.createNewFile();
+          if (isDebugging) { log.debug("Tried to create modified file tracker"); }
+        } catch (IOException ioe) {
+          // Do nothing
+          if (isDebugging) { log.debug("Unable to create/update modified file tracker", ioe); }
+        }
+
         while(iter.hasNext()) {
           File file = (File) iter.next();
-          exec.execute(new Xls2xmlConverter(file, config, landmarks));
+          if (((runModifiedOnly) && (file.lastModified() >= lastmodifieddatetime)) || (!runModifiedOnly)){
+            exec.execute(new Xls2xmlConverter(file, config, landmarks));
+          }
         }
         
         exec.shutdown();
