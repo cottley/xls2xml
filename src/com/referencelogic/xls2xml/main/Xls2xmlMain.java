@@ -30,6 +30,8 @@ public class Xls2xmlMain {
     private static boolean isDebugging;
     private static final String configFileName = "xls2xml.config.xml";
     private static boolean runModifiedOnly = false;
+    private static boolean matchRegex = false;
+    private static String matchRegexStr = ".*";
     private ExecutorService exec;
     public LandmarkList landmarks;
     
@@ -41,6 +43,14 @@ public class Xls2xmlMain {
           if (s.equalsIgnoreCase("--modified")) {
             runModifiedOnly = true;
           }
+                    
+          if (matchRegex && matchRegexStr.equals(".*")) {
+            matchRegexStr = s;
+          }
+          
+          if (s.equalsIgnoreCase("--restrict")) {
+            matchRegex = true;
+          }          
         }
         new Xls2xmlMain().run();
     }
@@ -121,8 +131,17 @@ public class Xls2xmlMain {
 
         while(iter.hasNext()) {
           File file = (File) iter.next();
+          String filePath = "";
+          try {
+            filePath = file.getCanonicalPath();
+          } catch (IOException ioe) {
+            log.warn("Unable to get canonical path from file", ioe);
+          }
           if (((runModifiedOnly) && (file.lastModified() >= lastmodifieddatetime)) || (!runModifiedOnly)){
-            exec.execute(new Xls2xmlConverter(file, config, landmarks));
+            
+            if ((!matchRegex) || (matchRegex && filePath.matches(matchRegexStr))) {
+              exec.execute(new Xls2xmlConverter(file, config, landmarks));
+            }
           }
         }
         
