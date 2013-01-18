@@ -171,6 +171,17 @@ public class LandmarkMatchList {
     if (direction.equalsIgnoreCase("N") || direction.equalsIgnoreCase("S")) { row += distance; }
     if (direction.equalsIgnoreCase("W") || direction.equalsIgnoreCase("E")) { col += distance; }
     
+    // If calculated row is beyond limit, don't go beyond limit
+    if (row > 65535) {
+      if (cell instanceof org.apache.poi.hssf.usermodel.HSSFCell) {
+        row = 65535;
+      } else {
+        if (row > 1048575) {
+          row = 1048575;
+        }
+      }
+    }
+    
     result = new LandmarkMatch(row, col);
 
     return result;
