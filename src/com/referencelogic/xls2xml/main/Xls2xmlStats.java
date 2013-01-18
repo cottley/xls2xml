@@ -5,6 +5,7 @@
 package com.referencelogic.xls2xml.main;
 
 import java.util.concurrent.atomic.AtomicInteger;
+import java.text.DecimalFormat;
 
 public class Xls2xmlStats {
 
@@ -27,7 +28,7 @@ public class Xls2xmlStats {
     if (noOfFiles > 0) {
       int processedCount = getNoOfProcessedFiles();
       if (processedCount <= noOfFiles) {
-        result = "" + (processedCount / noOfFiles) + "% complete. " + processedCount + " out of " + noOfFiles;
+        result = "" + (new DecimalFormat("##0.00")).format((processedCount / noOfFiles) * 100) + "% complete. " + processedCount + " out of " + noOfFiles;
       }
     }
     
