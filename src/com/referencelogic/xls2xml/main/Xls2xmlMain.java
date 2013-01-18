@@ -95,6 +95,8 @@ public class Xls2xmlMain {
 
     public void run() {
       try {
+        int noOfFilesToProcess = 0;
+      
         XMLConfiguration config = new XMLConfiguration(configFileName);
         landmarks = new LandmarkList(config);
         String sourceDir = config.getString("source.path");
@@ -136,17 +138,21 @@ public class Xls2xmlMain {
           String filePath = "";
           try {
             filePath = file.getCanonicalPath();
+            log.debug("Canonical path being processed is: " + filePath);
           } catch (IOException ioe) {
             log.warn("Unable to get canonical path from file", ioe);
           }
           if (((runModifiedOnly) && (file.lastModified() >= lastmodifieddatetime)) || (!runModifiedOnly)){
             
             if ((!matchRegex) || (matchRegex && filePath.matches(matchRegexStr))) {
+              noOfFilesToProcess++;
               exec.execute(new Xls2xmlConverter(file, config, landmarks));
             }
             
           }
         }
+        
+        Xls2xmlStats.setNoOfFiles(noOfFilesToProcess);
         
         exec.shutdown();
         try {

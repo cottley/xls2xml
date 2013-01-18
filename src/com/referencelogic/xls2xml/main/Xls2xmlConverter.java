@@ -180,6 +180,9 @@ public class Xls2xmlConverter implements Runnable {
       } catch (IOException ioe) {
         log.error("Could not create destination file: " + destFilePath, ioe);
       }
+      
+      Xls2xmlStats.recordFileProcessed();
+      log.debug("STATISTICS: " + Xls2xmlStats.status());
 
   }
   
