@@ -49,7 +49,7 @@ public class Xls2xmlStats {
         Iterator it = set.iterator();
         while (it.hasNext()) {
           Map.Entry entry = (Map.Entry) it.next();
-          result += entry.getKey() + " : " + entry.getValue() + separator;
+          result += "STATISTICS: Thread " + entry.getKey() + " : " + entry.getValue() + separator;
         }
         
         }
