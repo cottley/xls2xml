@@ -148,6 +148,7 @@ public class Xls2xmlConverter implements Runnable {
       String sourceDir = config.getString("source.path");
       String destDir = config.getString("destination.path");
       String sourceFilePath = file.toString();
+      Xls2xmlStats.setThreadFileProcess(Thread.currentThread().getName(), sourceFilePath);
       if (isDebugging) { log.debug("Processing " + sourceFilePath); }
       // Destination file is same directory in output with xml
       String destFilePath = sourceFilePath.substring(sourceDir.length());
@@ -182,6 +183,7 @@ public class Xls2xmlConverter implements Runnable {
       }
       
       Xls2xmlStats.recordFileProcessed();
+      Xls2xmlStats.setThreadFileProcess(Thread.currentThread().getName(), "");
       log.debug("STATISTICS: " + Xls2xmlStats.status());
 
   }
