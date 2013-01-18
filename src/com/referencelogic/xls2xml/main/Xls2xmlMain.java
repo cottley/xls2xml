@@ -31,7 +31,7 @@ public class Xls2xmlMain {
     private static final String configFileName = "xls2xml.config.xml";
     private static boolean runModifiedOnly = false;
     private static boolean matchRegex = false;
-    private static String matchRegexStr = ".*";
+    private static String matchRegexStr = "";
     private ExecutorService exec;
     public LandmarkList landmarks;
     
@@ -44,12 +44,14 @@ public class Xls2xmlMain {
             runModifiedOnly = true;
           }
                     
-          if (matchRegex && matchRegexStr.equals(".*")) {
+          if (matchRegex && matchRegexStr.equals("")) {
             matchRegexStr = s;
+            log.debug("Set regex string to: " + matchRegexStr);
           }
           
           if (s.equalsIgnoreCase("--restrict")) {
             matchRegex = true;
+            log.debug("Got restrict flag, so matching regex");
           }          
         }
         new Xls2xmlMain().run();
@@ -142,6 +144,7 @@ public class Xls2xmlMain {
             if ((!matchRegex) || (matchRegex && filePath.matches(matchRegexStr))) {
               exec.execute(new Xls2xmlConverter(file, config, landmarks));
             }
+            
           }
         }
         
