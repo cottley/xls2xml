@@ -481,73 +481,81 @@ public class LandmarkMatchList {
   
   public boolean checkEndOfSection(Hashtable sectionLandmarks, int rowoffset, Hashtable sectionEndLandmarks, LandmarkList landmarks, Sheet sheet, FormulaEvaluator evaluator, String defaultDirection) {
     boolean result = false;
-    
-    // Get max blank lines
-    int maxblanklines = 0; // Min valid value is 1
-    
-    try {
-      // Get a section landmark
-      Enumeration sectionEndLandmarksKeys = sectionEndLandmarks.keys();
-      if (sectionEndLandmarksKeys.hasMoreElements()) {
-        String key = (String) sectionEndLandmarksKeys.nextElement();
-        Landmark maxblanklineslm = landmarks.getLandmark(landmarks.getLandmarkNumberFromId(key));
-        maxblanklines = Integer.parseInt(maxblanklineslm.getCollectionMaxBlankLines());
-      }
-    } catch (Exception e) {
-      log.trace("Unable to get a defined value for max blank lines for section end landmarks", e);
-    }
-    
-    // If limit on max blank lines
-    if (maxblanklines > 0) {
-      boolean allareblank = true;
-      //  repeat max blank lines times
-      for (int count=0; count<maxblanklines; count++) {
-        //    check to see if specified line is blank for section
-        allareblank &= isRowBlank(sectionLandmarks, rowoffset + count, sheet, landmarks, evaluator, defaultDirection);
-      }
-      //  if all lines are blank result is true
-      result = allareblank;
-    } else {
-    //   for each landmark in section end
-      Enumeration sectionEndLandmarksKeys = sectionEndLandmarks.keys();
-      while (sectionEndLandmarksKeys.hasMoreElements()) {
-        String key = (String) sectionEndLandmarksKeys.nextElement();
-        //     Get section end landmark match row and column
-        ArrayList<Cell> sectionEndLandmarksMatches = matches[landmarks.getLandmarkNumberFromId(key)];
-        
-        //     for each of the section landmarks
-        for (Cell sectionEndLandmarkMatch : sectionEndLandmarksMatches) {
 
-          Enumeration sectionLandmarksKeys = sectionLandmarks.keys();
-          //   For each landmark in the section
-          while (sectionLandmarksKeys.hasMoreElements()) {
-            String lmkey = (String) sectionLandmarksKeys.nextElement();
-            
-            ArrayList<Cell> sectionLandmarksMatches = matches[landmarks.getLandmarkNumberFromId(lmkey)];
-            
-            for (Cell sectionLandmarkMatch : sectionLandmarksMatches) {
-    //       if section landmark row + rowoffset equals section end landmark row
-    //          and section landmark col equals section end landmark col
-    //            result is true
-    //       end if
-               if ((sectionEndLandmarkMatch.getRowIndex()    == sectionLandmarkMatch.getRowIndex() + rowoffset) &&
-                   (sectionEndLandmarkMatch.getColumnIndex() == sectionLandmarkMatch.getColumnIndex())) {
-                 result = true;
-                 break;
-               }
-            }
-            
-            if (result) { break; }
-          }
-        
-          if (result) { break; }
-        } //     end for
-        
-        if (result) { break; }
-      } //   end for
+    // Cannot have rows past end of spreadsheet
+    if (rowoffset > 65535) { result = true; }
     
-    // end if
+    if (!result) {
+    
+      // Get max blank lines
+      int maxblanklines = 0; // Min valid value is 1
+      
+      try {
+        // Get a section landmark
+        Enumeration sectionEndLandmarksKeys = sectionEndLandmarks.keys();
+        if (sectionEndLandmarksKeys.hasMoreElements()) {
+          String key = (String) sectionEndLandmarksKeys.nextElement();
+          Landmark maxblanklineslm = landmarks.getLandmark(landmarks.getLandmarkNumberFromId(key));
+          maxblanklines = Integer.parseInt(maxblanklineslm.getCollectionMaxBlankLines());
+        }
+      } catch (Exception e) {
+        log.trace("Unable to get a defined value for max blank lines for section end landmarks", e);
+      }
+      
+      // If limit on max blank lines
+      if (maxblanklines > 0) {
+        boolean allareblank = true;
+        //  repeat max blank lines times
+        for (int count=0; count<maxblanklines; count++) {
+          //    check to see if specified line is blank for section
+          allareblank &= isRowBlank(sectionLandmarks, rowoffset + count, sheet, landmarks, evaluator, defaultDirection);
+        }
+        //  if all lines are blank result is true
+        result = allareblank;
+      } else {
+      //   for each landmark in section end
+        Enumeration sectionEndLandmarksKeys = sectionEndLandmarks.keys();
+        while (sectionEndLandmarksKeys.hasMoreElements()) {
+          String key = (String) sectionEndLandmarksKeys.nextElement();
+          //     Get section end landmark match row and column
+          ArrayList<Cell> sectionEndLandmarksMatches = matches[landmarks.getLandmarkNumberFromId(key)];
+          
+          //     for each of the section landmarks
+          for (Cell sectionEndLandmarkMatch : sectionEndLandmarksMatches) {
+
+            Enumeration sectionLandmarksKeys = sectionLandmarks.keys();
+            //   For each landmark in the section
+            while (sectionLandmarksKeys.hasMoreElements()) {
+              String lmkey = (String) sectionLandmarksKeys.nextElement();
+              
+              ArrayList<Cell> sectionLandmarksMatches = matches[landmarks.getLandmarkNumberFromId(lmkey)];
+              
+              for (Cell sectionLandmarkMatch : sectionLandmarksMatches) {
+      //       if section landmark row + rowoffset equals section end landmark row
+      //          and section landmark col equals section end landmark col
+      //            result is true
+      //       end if
+                 if ((sectionEndLandmarkMatch.getRowIndex()    == sectionLandmarkMatch.getRowIndex() + rowoffset) &&
+                     (sectionEndLandmarkMatch.getColumnIndex() == sectionLandmarkMatch.getColumnIndex())) {
+                   result = true;
+                   break;
+                 }
+              }
+              
+              if (result) { break; }
+            }
+          
+            if (result) { break; }
+          } //     end for
+          
+          if (result) { break; }
+        } //   end for
+      
+      // end if
+      }
+    
     }
+    
     return result;
   }
   
