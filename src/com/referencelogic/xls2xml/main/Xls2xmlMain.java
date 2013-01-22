@@ -30,6 +30,7 @@ public class Xls2xmlMain {
     private static boolean isDebugging;
     private static final String configFileName = "xls2xml.config.xml";
     private static boolean runModifiedOnly = false;
+    private static boolean ignoreExisting = false;
     private static boolean matchRegex = false;
     private static String matchRegexStr = "";
     private ExecutorService exec;
@@ -42,6 +43,10 @@ public class Xls2xmlMain {
         {
           if (s.equalsIgnoreCase("--modified")) {
             runModifiedOnly = true;
+          }
+          
+          if (s.equalsIgnoreCase("--ignore-existing")) {
+            ignoreExisting = true;
           }
                     
           if (matchRegex && matchRegexStr.equals("")) {
@@ -146,7 +151,7 @@ public class Xls2xmlMain {
             
             if ((!matchRegex) || (matchRegex && filePath.matches(matchRegexStr))) {
               noOfFilesToProcess++;
-              exec.execute(new Xls2xmlConverter(file, config, landmarks));
+              exec.execute(new Xls2xmlConverter(file, config, landmarks, ignoreExisting));
             }
             
           }

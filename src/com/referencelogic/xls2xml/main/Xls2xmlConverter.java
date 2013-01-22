@@ -39,11 +39,13 @@ public class Xls2xmlConverter implements Runnable {
   private static final Logger log = Logger.getLogger( Xls2xmlConverter.class );
   protected boolean isDebugging;
   protected LandmarkList landmarks;
+  protected boolean ignoreExisting;
 
-  Xls2xmlConverter(File file, XMLConfiguration config, LandmarkList landmarks) {
+  Xls2xmlConverter(File file, XMLConfiguration config, LandmarkList landmarks, boolean ignoreExisting) {
     this.file = file;
     this.config = config;
     this.landmarks = landmarks;
+    this.ignoreExisting = ignoreExisting;
   }
 
   public String process2xml() {
@@ -159,25 +161,31 @@ public class Xls2xmlConverter implements Runnable {
       destFilePath = destFile.toString();
       try {
         FileUtils.touch(destFile);
-        if (isDebugging) { log.debug("Created destination file: " + destFilePath); }
-        // Put some XML in the file
+        if (ignoreExisting && (FileUtils.sizeOf(destFile) > 0)) {
+          log.debug("Ignoring the recreation of file: " + destFilePath); 
+        } else {
         
-        String processedXML = process2xml();
+          if (isDebugging) { log.debug("Created destination file: " + destFilePath); }
+          // Put some XML in the file
         
-        BufferedWriter output = new BufferedWriter(new FileWriter(destFile));
+          String processedXML = process2xml();
+        
+          BufferedWriter output = new BufferedWriter(new FileWriter(destFile));
 
-        // Only write data to the file if there is data from the processing
-        if (!processedXML.equals("")) {
-          output.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?>");
-          output.newLine();
-          String roottag = config.getString("conversion.tags.root");
-          output.append("<" + roottag + ">");
-          output.newLine();
-          output.append(processedXML);
-          output.append("</" + roottag + ">");
-        }
+          // Only write data to the file if there is data from the processing
+          if (!processedXML.equals("")) {
+            output.append("<?xml version=\"1.0\" encoding=\"ISO-8859-1\" ?>");
+            output.newLine();
+            String roottag = config.getString("conversion.tags.root");
+            output.append("<" + roottag + ">");
+            output.newLine();
+            output.append(processedXML);
+            output.append("</" + roottag + ">");
+          }
         
-        output.close();        
+          output.close();
+        
+        }
       } catch (IOException ioe) {
         log.error("Could not create destination file: " + destFilePath, ioe);
       }
