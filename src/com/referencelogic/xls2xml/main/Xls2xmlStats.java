@@ -39,7 +39,7 @@ public class Xls2xmlStats {
     if (noOfFiles > 0) {
       int processedCount = getNoOfProcessedFiles();
       if (processedCount <= noOfFiles) {
-        result = "" + (new DecimalFormat("##0.00")).format((processedCount / noOfFiles) * 100) + "% complete. " + processedCount + " out of " + noOfFiles;
+        result = "" + (new DecimalFormat("###.##")).format(((float)processedCount / (float)noOfFiles) * 100) + "% complete. " + processedCount + " out of " + noOfFiles;
         
         result += separator;
         

@@ -184,7 +184,7 @@ public class Xls2xmlConverter implements Runnable {
       
       Xls2xmlStats.recordFileProcessed();
       Xls2xmlStats.setThreadFileProcess(Thread.currentThread().getName(), "");
-      log.debug("STATISTICS: " + Xls2xmlStats.status());
+      log.info("STATISTICS: " + Xls2xmlStats.status());
 
   }
   
