@@ -162,7 +162,8 @@ public class Xls2xmlConverter implements Runnable {
       try {
         FileUtils.touch(destFile);
         if (ignoreExisting && (FileUtils.sizeOf(destFile) > 0)) {
-          log.debug("Ignoring the recreation of file: " + destFilePath); 
+          log.debug("Ignoring the recreation of file: " + destFilePath);
+          log.debug("Filesize is: " + FileUtils.sizeOf(destFile));
         } else {
         
           if (isDebugging) { log.debug("Created destination file: " + destFilePath); }
