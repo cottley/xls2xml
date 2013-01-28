@@ -17,6 +17,9 @@ import org.apache.poi.ss.usermodel.DataFormatter;
 
 import java.text.SimpleDateFormat;
 
+import java.util.Formatter;
+import java.math.BigDecimal;
+
 public class LandmarkMatchList {
 
   private static final Logger log = Logger.getLogger( LandmarkMatchList.class );
@@ -114,7 +117,10 @@ public class LandmarkMatchList {
                     if ((!ignoreformatting) && (DateUtil.isCellDateFormatted(cell))) {
                         cellvalue = "" + format.format(cell.getDateCellValue());
                     } else {
-                        cellvalue = "" + cell.getNumericCellValue();
+                        BigDecimal bg = new BigDecimal(cell.getNumericCellValue());
+                        Formatter fmt = new Formatter();
+                        fmt.format("%." + bg.scale() + "f", bg);
+                        cellvalue = "" + fmt.toString();
                     }
                     break;
                 case Cell.CELL_TYPE_BOOLEAN:
@@ -137,7 +143,10 @@ public class LandmarkMatchList {
                           if ((!ignoreformatting) && (!isDouble(dataFormatter.formatCellValue(cell, evaluator)))) {
                             cellvalue = "" + format.format(DateUtil.getJavaDate(cellValue.getNumberValue()));
                           } else {
-                            cellvalue = "" + cellValue.getNumberValue();
+                            BigDecimal bg = new BigDecimal(cellValue.getNumberValue());
+                            Formatter fmt = new Formatter();
+                            fmt.format("%." + bg.scale() + "f", bg);
+                            cellvalue = "" + fmt.toString();
                           }
                           break;
                         case Cell.CELL_TYPE_STRING:
