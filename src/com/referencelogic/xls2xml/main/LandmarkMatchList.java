@@ -128,7 +128,12 @@ public class LandmarkMatchList {
                     break;
                 case Cell.CELL_TYPE_FORMULA:
                     try { cellvalue = cell.getRichStringCellValue().getString(); } catch (Exception e) { } 
-                    try { cellvalue = "" + cell.getNumericCellValue(); } catch (Exception e) { } 
+                    try { 
+                        BigDecimal bg = new BigDecimal(cell.getNumericCellValue());
+                        Formatter fmt = new Formatter();
+                        fmt.format("%." + bg.scale() + "f", bg);
+                        cellvalue = "" + fmt.toString();
+                    } catch (Exception e) { } 
                     try { cellvalue = "" + cell.getBooleanCellValue(); } catch (Exception e) { } 
                     
                     try {
