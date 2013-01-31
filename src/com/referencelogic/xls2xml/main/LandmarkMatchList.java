@@ -117,10 +117,13 @@ public class LandmarkMatchList {
                     if ((!ignoreformatting) && (DateUtil.isCellDateFormatted(cell))) {
                         cellvalue = "" + format.format(cell.getDateCellValue());
                     } else {
-                        BigDecimal bg = new BigDecimal(cell.getNumericCellValue());
-                        Formatter fmt = new Formatter();
-                        fmt.format("%." + bg.scale() + "f", bg);
-                        cellvalue = "" + fmt.toString();
+                        cellvalue = "" + cell.getNumericCellValue();
+                        if (cellvalue.indexOf("E") > -1) { // Only when scientific notation, expand
+                          BigDecimal bg = new BigDecimal(cell.getNumericCellValue());
+                          Formatter fmt = new Formatter();
+                          fmt.format("%." + bg.scale() + "f", bg);
+                          cellvalue = "" + fmt.toString();
+                        }
                     }
                     break;
                 case Cell.CELL_TYPE_BOOLEAN:
@@ -129,10 +132,13 @@ public class LandmarkMatchList {
                 case Cell.CELL_TYPE_FORMULA:
                     try { cellvalue = cell.getRichStringCellValue().getString(); } catch (Exception e) { } 
                     try { 
+                      cellvalue = "" + cell.getNumericCellValue();
+                      if (cellvalue.indexOf("E") > -1) { // Only when scientific notation, expand
                         BigDecimal bg = new BigDecimal(cell.getNumericCellValue());
                         Formatter fmt = new Formatter();
                         fmt.format("%." + bg.scale() + "f", bg);
                         cellvalue = "" + fmt.toString();
+                      }  
                     } catch (Exception e) { } 
                     try { cellvalue = "" + cell.getBooleanCellValue(); } catch (Exception e) { } 
                     
@@ -148,10 +154,13 @@ public class LandmarkMatchList {
                           if ((!ignoreformatting) && (!isDouble(dataFormatter.formatCellValue(cell, evaluator)))) {
                             cellvalue = "" + format.format(DateUtil.getJavaDate(cellValue.getNumberValue()));
                           } else {
-                            BigDecimal bg = new BigDecimal(cellValue.getNumberValue());
-                            Formatter fmt = new Formatter();
-                            fmt.format("%." + bg.scale() + "f", bg);
-                            cellvalue = "" + fmt.toString();
+                            cellvalue = "" + cellValue.getNumberValue();
+                            if (cellvalue.indexOf("E") > -1) { // Only when scientific notation, expand
+                              BigDecimal bg = new BigDecimal(cellValue.getNumberValue());
+                              Formatter fmt = new Formatter();
+                              fmt.format("%." + bg.scale() + "f", bg);
+                              cellvalue = "" + fmt.toString();
+                            }
                           }
                           break;
                         case Cell.CELL_TYPE_STRING:
