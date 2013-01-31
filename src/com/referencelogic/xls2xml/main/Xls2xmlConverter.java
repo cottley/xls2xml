@@ -160,11 +160,11 @@ public class Xls2xmlConverter implements Runnable {
       File destFile = new File(destDir, destFilePath);
       destFilePath = destFile.toString();
       try {
-        FileUtils.touch(destFile);
         if (ignoreExisting && (FileUtils.sizeOf(destFile) > 0)) {
           log.debug("Ignoring the recreation of file: " + destFilePath);
           log.debug("Filesize is: " + FileUtils.sizeOf(destFile));
         } else {
+          FileUtils.touch(destFile);
         
           if (isDebugging) { log.debug("Created destination file: " + destFilePath); }
           // Put some XML in the file
