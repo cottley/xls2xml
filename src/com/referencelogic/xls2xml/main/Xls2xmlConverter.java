@@ -155,12 +155,12 @@ public class Xls2xmlConverter implements Runnable {
       // Destination file is same directory in output with xml
       String destFilePath = sourceFilePath.substring(sourceDir.length());
       if (destFilePath.startsWith(File.separator)) { destFilePath = destFilePath.substring(1); } 
-      // Replace extensions with .xml
-      destFilePath = FilenameUtils.removeExtension(destFilePath) + ".xml";  
+      // Add extensions with .xml
+      destFilePath = destFilePath + ".xml";  
       File destFile = new File(destDir, destFilePath);
       destFilePath = destFile.toString();
       try {
-        if (ignoreExisting && (FileUtils.sizeOf(destFile) > 0)) {
+        if (ignoreExisting && destFile.exists() && (FileUtils.sizeOf(destFile) > 0)) {
           log.debug("Ignoring the recreation of file: " + destFilePath);
           log.debug("Filesize is: " + FileUtils.sizeOf(destFile));
         } else {
