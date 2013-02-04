@@ -121,6 +121,7 @@ public class Xls2xmlMain {
              pid = new ServerSocket(1901);
              waitToRun = false;
           } catch (Exception e) {
+             log.error("Could not lock port", e);
              try {
                // Sleep between 1 and 60 seconds before trying to bind again
                Thread.sleep((1 + (int)(Math.random() * ((60 - 1) + 1))) * 1000);
@@ -129,6 +130,7 @@ public class Xls2xmlMain {
              }
           }
         }
+        log.info("Starting to run");
         
         
         if (isDebugging) { log.debug("Loaded configuration successfully. Reading file list from: " + sourceDir + " with allowed extensions " + allowedExtensions); }
