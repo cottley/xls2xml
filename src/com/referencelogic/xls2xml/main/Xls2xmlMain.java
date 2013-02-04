@@ -174,10 +174,10 @@ public class Xls2xmlMain {
           if (((runModifiedOnly) && (file.lastModified() >= lastmodifieddatetime)) || (!runModifiedOnly)){
             
             if ((!matchRegex) || (matchRegex && filePath.matches(matchRegexStr))) {
-              noOfFilesToProcess++;
-              
+             
               if (!ignoreExisting) {
                 exec.execute(new Xls2xmlConverter(file, config, landmarks, ignoreExisting));
+                noOfFilesToProcess++;
               } else {
                 String sourceFilePath = file.toString();
                 String destFilePath = sourceFilePath.substring(sourceDir.length());
@@ -187,10 +187,11 @@ public class Xls2xmlMain {
                 File destFile = new File(destDir, destFilePath);
                 
                 if (ignoreExisting && destFile.exists() && (FileUtils.sizeOf(destFile) > 0)) {
-                  log.debug("Ignoring the recreation of file: " + destFilePath);
-                  log.debug("Filesize is: " + FileUtils.sizeOf(destFile));
+                  log.info("Ignoring the recreation of file: " + destFilePath);
+                  log.debug("Ignored filesize is: " + FileUtils.sizeOf(destFile));
                 } else {
                   exec.execute(new Xls2xmlConverter(file, config, landmarks, ignoreExisting));
+                  noOfFilesToProcess++;
                 }
         
               }
