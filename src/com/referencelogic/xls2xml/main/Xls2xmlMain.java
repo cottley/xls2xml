@@ -190,6 +190,7 @@ public class Xls2xmlMain {
                   log.info("Ignoring the recreation of file: " + destFilePath);
                   log.debug("Ignored filesize is: " + FileUtils.sizeOf(destFile));
                 } else {
+                  log.info("Queueing the creation of file: " + destFilePath);
                   exec.execute(new Xls2xmlConverter(file, config, landmarks, ignoreExisting));
                   noOfFilesToProcess++;
                 }
