@@ -151,7 +151,25 @@ public class Xls2xmlMain {
             
             if ((!matchRegex) || (matchRegex && filePath.matches(matchRegexStr))) {
               noOfFilesToProcess++;
-              exec.execute(new Xls2xmlConverter(file, config, landmarks, ignoreExisting));
+              
+              if (!ignoreExisting) {
+                exec.execute(new Xls2xmlConverter(file, config, landmarks, ignoreExisting));
+              } else {
+                String sourceFilePath = file.toString();
+                String destFilePath = sourceFilePath.substring(sourceDir.length());
+                if (destFilePath.startsWith(File.separator)) { destFilePath = destFilePath.substring(1); } 
+                // Add extensions with .xml
+                destFilePath = destFilePath + ".xml";  
+                File destFile = new File(destDir, destFilePath);
+                
+                if (ignoreExisting && destFile.exists() && (FileUtils.sizeOf(destFile) > 0)) {
+                  log.debug("Ignoring the recreation of file: " + destFilePath);
+                  log.debug("Filesize is: " + FileUtils.sizeOf(destFile));
+                } else {
+                  exec.execute(new Xls2xmlConverter(file, config, landmarks, ignoreExisting));
+                }
+        
+              }
             }
             
           }
