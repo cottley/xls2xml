@@ -143,6 +143,8 @@ public class Xls2xmlConverter implements Runnable {
     } catch (Exception e) {
       log.error("Unable to open " + file.toString() + " as an Excel file.", e);    
     }
+    // If cannot render, make sure don't reprocess unnecessarily
+    if (result.equals("")) { result = "<Notemplatedata></Notemplatedata>"; }
     return result;
   }
     
