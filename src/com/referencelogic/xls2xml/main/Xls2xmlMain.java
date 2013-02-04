@@ -24,6 +24,8 @@ import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.configuration.HierarchicalConfiguration;
 
+import java.net.ServerSocket;
+
 public class Xls2xmlMain {
     
     private static final Logger log = Logger.getLogger( Xls2xmlMain.class );
@@ -35,6 +37,7 @@ public class Xls2xmlMain {
     private static String matchRegexStr = "";
     private ExecutorService exec;
     public LandmarkList landmarks;
+    private ServerSocket pid;
     
     public static void main(String args[]) {
         PropertyConfigurator.configure("log4j.properties");
@@ -59,6 +62,7 @@ public class Xls2xmlMain {
             log.debug("Got restrict flag, so matching regex");
           }          
         }
+              
         new Xls2xmlMain().run();
     }
     
@@ -109,6 +113,24 @@ public class Xls2xmlMain {
         String destDir = config.getString("destination.path");
         int poolSize = config.getInt("threadpool.size");
         populateLandmarkList(config);
+        
+        boolean waitToRun = true;
+        while (waitToRun) {
+          try {
+             // Use socket number as PID
+             pid = new ServerSocket(1901);
+             waitToRun = false;
+          } catch (Exception e) {
+             try {
+               // Sleep between 1 and 60 seconds before trying to bind again
+               Thread.sleep((1 + (int)(Math.random() * ((60 - 1) + 1))) * 1000);
+             } catch (InterruptedException ie) {
+             
+             }
+          }
+        }
+        
+        
         if (isDebugging) { log.debug("Loaded configuration successfully. Reading file list from: " + sourceDir + " with allowed extensions " + allowedExtensions); }
         Iterator iter =  FileUtils.iterateFiles(new File(sourceDir), (String[])allowedExtensions.toArray(new String[allowedExtensions.size()]), true);
         if (poolSize < 1) { poolSize = 5; }
@@ -189,6 +211,12 @@ public class Xls2xmlMain {
       } catch(ConfigurationException cex) {
         log.fatal("Unable to load config file " + configFileName + " to determine configuration.", cex);
       }   
+      
+      try {
+         pid.close();
+      } catch (Exception e) {
+         log.error("Unable to release port!");
+      }
     }
     
 }
