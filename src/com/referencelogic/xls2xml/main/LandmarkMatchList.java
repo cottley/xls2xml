@@ -538,7 +538,9 @@ public class LandmarkMatchList {
         }
         //  if all lines are blank result is true
         result = allareblank;
-      } else {
+      }
+      
+      if (!result) {
       //   for each landmark in section end
         log.debug("For each landmark in section end");
         Enumeration sectionEndLandmarksKeys = sectionEndLandmarks.keys();
@@ -565,9 +567,9 @@ public class LandmarkMatchList {
       //          and section landmark col equals section end landmark col
       //            result is true
       //       end if
-                 if ((sectionEndLandmarkMatch.getRowIndex()    == sectionLandmarkMatch.getRowIndex() + rowoffset) ||
-                     (sectionEndLandmarkMatch.getRowIndex()    == sectionLandmarkMatch.getRowIndex() ) 
-                     ) { // && (sectionEndLandmarkMatch.getColumnIndex() == sectionLandmarkMatch.getColumnIndex())
+                 if ((sectionEndLandmarkMatch.getRowIndex()    == sectionLandmarkMatch.getRowIndex() + rowoffset)
+                     && (sectionEndLandmarkMatch.getColumnIndex() == sectionLandmarkMatch.getColumnIndex())
+                     ) {
                    result = true;
                    break;
                  }
