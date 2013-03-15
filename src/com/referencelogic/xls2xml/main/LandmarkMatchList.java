@@ -537,9 +537,11 @@ public class LandmarkMatchList {
         result = allareblank;
       } else {
       //   for each landmark in section end
+        log.debug("For each landmark in section end");
         Enumeration sectionEndLandmarksKeys = sectionEndLandmarks.keys();
         while (sectionEndLandmarksKeys.hasMoreElements()) {
           String key = (String) sectionEndLandmarksKeys.nextElement();
+          log.debug("sectionEndLandmarkKeys: key: " + key);
           //     Get section end landmark match row and column
           ArrayList<Cell> sectionEndLandmarksMatches = matches[landmarks.getLandmarkNumberFromId(key)];
           
@@ -548,8 +550,10 @@ public class LandmarkMatchList {
 
             Enumeration sectionLandmarksKeys = sectionLandmarks.keys();
             //   For each landmark in the section
+            log.debug("For each landmark in the section");
             while (sectionLandmarksKeys.hasMoreElements()) {
               String lmkey = (String) sectionLandmarksKeys.nextElement();
+              log.debug("sectionLandmarkKeys: lmkey: " + lmkey);
               
               ArrayList<Cell> sectionLandmarksMatches = matches[landmarks.getLandmarkNumberFromId(lmkey)];
               
@@ -558,7 +562,8 @@ public class LandmarkMatchList {
       //          and section landmark col equals section end landmark col
       //            result is true
       //       end if
-                 if ((sectionEndLandmarkMatch.getRowIndex()    == sectionLandmarkMatch.getRowIndex() + rowoffset) 
+                 if ((sectionEndLandmarkMatch.getRowIndex()    == sectionLandmarkMatch.getRowIndex() + rowoffset) ||
+                     (sectionEndLandmarkMatch.getRowIndex()    == sectionLandmarkMatch.getRowIndex() ) 
                      ) { // && (sectionEndLandmarkMatch.getColumnIndex() == sectionLandmarkMatch.getColumnIndex())
                    result = true;
                    break;
