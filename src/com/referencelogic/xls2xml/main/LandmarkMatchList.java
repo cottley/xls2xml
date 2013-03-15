@@ -558,8 +558,8 @@ public class LandmarkMatchList {
       //          and section landmark col equals section end landmark col
       //            result is true
       //       end if
-                 if ((sectionEndLandmarkMatch.getRowIndex()    == sectionLandmarkMatch.getRowIndex() + rowoffset) &&
-                     (sectionEndLandmarkMatch.getColumnIndex() == sectionLandmarkMatch.getColumnIndex())) {
+                 if ((sectionEndLandmarkMatch.getRowIndex()    == sectionLandmarkMatch.getRowIndex() + rowoffset) 
+                     ) { // && (sectionEndLandmarkMatch.getColumnIndex() == sectionLandmarkMatch.getColumnIndex())
                    result = true;
                    break;
                  }
