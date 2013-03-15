@@ -1,6 +1,8 @@
 package com.referencelogic.xls2xml.main;
 
 import org.apache.log4j.Logger;
+import org.apache.log4j.PropertyConfigurator;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Set;
@@ -29,6 +31,7 @@ public class LandmarkMatchList {
   protected DataFormatter dataFormatter = new DataFormatter();
 
   public LandmarkMatchList(int size) {
+    PropertyConfigurator.configure("log4j.properties");
     matches = new ArrayList[size];
     for (int i=0; i<size; i++) {
       matches[i] = new ArrayList();
