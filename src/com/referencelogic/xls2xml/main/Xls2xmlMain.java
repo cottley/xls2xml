@@ -34,6 +34,8 @@ public class Xls2xmlMain {
     private static boolean runModifiedOnly = false;
     private static boolean ignoreExisting = false;
     private static boolean matchRegex = false;
+    private static boolean convertSingleFile = false;
+    private static String convertSingleFilePath = "";
     private static String matchRegexStr = "";
     private ExecutorService exec;
     public LandmarkList landmarks;
@@ -60,10 +62,28 @@ public class Xls2xmlMain {
           if (s.equalsIgnoreCase("--restrict")) {
             matchRegex = true;
             log.debug("Got restrict flag, so matching regex");
-          }          
+          }
+
+          if (convertSingleFile && convertSingleFilePath.equalsIgnoreCase("")) {
+            convertSingleFilePath = s;
+            log.debug("Setting single file path conversion to: " + s);
+          }
+
+          if (s.equalsIgnoreCase("--csf")) {
+            convertSingleFile = true;
+            log.debug("Got convert single file flag, so only trying to convert one file");
+          }      
         }
-              
-        new Xls2xmlMain().run();
+
+        if (convertSingleFile) {
+
+          new Xls2xmlMain().runSingleFile(convertSingleFilePath);
+
+        } else {
+
+          new Xls2xmlMain().run();
+
+        }
     }
     
     public void populateLandmarkList(XMLConfiguration config) {
@@ -101,6 +121,25 @@ public class Xls2xmlMain {
         }
       }
     }
+
+
+    public void runSingleFile(String filepath) {
+      try {
+
+        XMLConfiguration config = new XMLConfiguration(configFileName);
+        landmarks = new LandmarkList(config);
+        populateLandmarkList(config);
+
+        File file = new File(filepath);
+        File specificDestFile = new File(filepath + ".xml");
+
+        new Xls2xmlConverter(file, specificDestFile, config, landmarks, ignoreExisting).runSingleFile();
+
+      } catch(ConfigurationException cex) {
+        log.fatal("Unable to load config file " + configFileName + " to determine configuration.", cex);
+      }
+    }
+
 
     public void run() {
       try {
